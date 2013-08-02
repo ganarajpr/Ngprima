@@ -31,16 +31,30 @@ function matchTemplate(code, template) {
             varList = tvList;
             break;
         }
-
+        //if they match go ahead
         if (code[j].value === template[i].value) {
             i++;
         }
+        //else test for a variable
         else if (regex.test(template[i].value)) {
+            //start copying the value for variable
+            var interest = code[j].value;
             var templateVariable = template[i].value;
+
             templateVariable = VerEx().find("$$_").replace(templateVariable, "");
             templateVariable = VerEx().find("_$$").replace(templateVariable, "");
-            tvList.push({name: templateVariable, value: code[j].value});
+
             i++;
+            j++;
+            while ( code[j].value !== template[i].value && j < code.length){
+                //until we dont match the next template token
+                //if its a variable
+                //keep adding the value to the variable
+                interest += code[j].value;
+                j++;
+            }
+            i++;
+            tvList.push({name: templateVariable, value: interest});
         }
         else{
             tvList = [];

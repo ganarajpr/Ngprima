@@ -1,1 +1,1 @@
-angular.module($$_moduleName_$$)
+angular.module($$_module_$$)

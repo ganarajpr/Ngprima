@@ -1,417 +1,562 @@
-{"type": "Program", "body": [
+[
     {
-        "type": "ExpressionStatement",
-        "expression": {
-            "type": "CallExpression",
-            "callee": {
-                "type": "FunctionExpression",
-                "id": null,
-                "params": [],
-                "body": {
-                    "type": "BlockStatement",
-                    "body": [
-                        {
-                            "type": "VariableDeclaration",
-                            "declarations": [
-                                {
-                                    "type": "VariableDeclarator",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "controllers"
-                                    },
-                                    "init": {
-                                        "type": "CallExpression",
-                                        "callee": {
-                                            "type": "MemberExpression",
-                                            "computed": false,
-                                            "object": {
-                                                "type": "Identifier",
-                                                "name": "angular"
-                                            },
-                                            "property": {
-                                                "type": "Identifier",
-                                                "name": "module"
-                                            }
-                                        },
-                                        "arguments": [
-                                            {
-                                                "type": "Literal",
-                                                "value": "layout"
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "kind": "var"
-                        },
-                        {
-                            "type": "ExpressionStatement",
-                            "expression": {
-                                "type": "CallExpression",
-                                "callee": {
-                                    "type": "MemberExpression",
-                                    "computed": false,
-                                    "object": {
-                                        "type": "Identifier",
-                                        "name": "controllers"
-                                    },
-                                    "property": {
-                                        "type": "Identifier",
-                                        "name": "controller"
-                                    }
-                                },
-                                "arguments": [
-                                    {
-                                        "type": "Literal",
-                                        "value": "OverlayController"
-                                    },
-                                    {
-                                        "type": "ArrayExpression",
-                                        "elements": [
-                                            {
-                                                "type": "Literal",
-                                                "value": "$scope"
-                                            },
-                                            {
-                                                "type": "Literal",
-                                                "value": "NodeService"
-                                            },
-                                            {
-                                                "type": "FunctionExpression",
-                                                "id": null,
-                                                "params": [
-                                                    {
-                                                        "type": "Identifier",
-                                                        "name": "$scope"
-                                                    },
-                                                    {
-                                                        "type": "Identifier",
-                                                        "name": "NodeService"
-                                                    }
-                                                ],
-                                                "body": {
-                                                    "type": "BlockStatement",
-                                                    "body": [
-                                                        {
-                                                            "type": "ExpressionStatement",
-                                                            "expression": {
-                                                                "type": "AssignmentExpression",
-                                                                "operator": "=",
-                                                                "left": {
-                                                                    "type": "MemberExpression",
-                                                                    "computed": false,
-                                                                    "object": {
-                                                                        "type": "Identifier",
-                                                                        "name": "$scope"
-                                                                    },
-                                                                    "property": {
-                                                                        "type": "Identifier",
-                                                                        "name": "options"
-                                                                    }
-                                                                },
-                                                                "right": {
-                                                                    "type": "ArrayExpression",
-                                                                    "elements": [
-                                                                        {
-                                                                            "type": "Literal",
-                                                                            "value": "Box"
-                                                                        },
-                                                                        {
-                                                                            "type": "Literal",
-                                                                            "value": "Link"
-                                                                        },
-                                                                        {
-                                                                            "type": "Literal",
-                                                                            "value": "List"
-                                                                        },
-                                                                        {
-                                                                            "type": "Literal",
-                                                                            "value": "Text"
-                                                                        },
-                                                                        {
-                                                                            "type": "Literal",
-                                                                            "value": "Input"
-                                                                        },
-                                                                        {
-                                                                            "type": "Literal",
-                                                                            "value": "Button"
-                                                                        },
-                                                                        {
-                                                                            "type": "Literal",
-                                                                            "value": "Image"
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            }
-                                                        },
-                                                        {
-                                                            "type": "ExpressionStatement",
-                                                            "expression": {
-                                                                "type": "AssignmentExpression",
-                                                                "operator": "=",
-                                                                "left": {
-                                                                    "type": "MemberExpression",
-                                                                    "computed": false,
-                                                                    "object": {
-                                                                        "type": "Identifier",
-                                                                        "name": "$scope"
-                                                                    },
-                                                                    "property": {
-                                                                        "type": "Identifier",
-                                                                        "name": "state"
-                                                                    }
-                                                                },
-                                                                "right": {
-                                                                    "type": "ObjectExpression",
-                                                                    "properties": []
-                                                                }
-                                                            }
-                                                        },
-                                                        {
-                                                            "type": "ExpressionStatement",
-                                                            "expression": {
-                                                                "type": "AssignmentExpression",
-                                                                "operator": "=",
-                                                                "left": {
-                                                                    "type": "MemberExpression",
-                                                                    "computed": false,
-                                                                    "object": {
-                                                                        "type": "MemberExpression",
-                                                                        "computed": false,
-                                                                        "object": {
-                                                                            "type": "Identifier",
-                                                                            "name": "$scope"
-                                                                        },
-                                                                        "property": {
-                                                                            "type": "Identifier",
-                                                                            "name": "state"
-                                                                        }
-                                                                    },
-                                                                    "property": {
-                                                                        "type": "Identifier",
-                                                                        "name": "selectedOption"
-                                                                    }
-                                                                },
-                                                                "right": {
-                                                                    "type": "Literal",
-                                                                    "value": ""
-                                                                }
-                                                            }
-                                                        },
-                                                        {
-                                                            "type": "ExpressionStatement",
-                                                            "expression": {
-                                                                "type": "CallExpression",
-                                                                "callee": {
-                                                                    "type": "MemberExpression",
-                                                                    "computed": false,
-                                                                    "object": {
-                                                                        "type": "Identifier",
-                                                                        "name": "$scope"
-                                                                    },
-                                                                    "property": {
-                                                                        "type": "Identifier",
-                                                                        "name": "$watch"
-                                                                    }
-                                                                },
-                                                                "arguments": [
-                                                                    {
-                                                                        "type": "Literal",
-                                                                        "value": "state.selectedOption"
-                                                                    },
-                                                                    {
-                                                                        "type": "FunctionExpression",
-                                                                        "id": null,
-                                                                        "params": [
-                                                                            {
-                                                                                "type": "Identifier",
-                                                                                "name": "newVal"
-                                                                            }
-                                                                        ],
-                                                                        "body": {
-                                                                            "type": "BlockStatement",
-                                                                            "body": [
-                                                                                {
-                                                                                    "type": "IfStatement",
-                                                                                    "test": {
-                                                                                        "type": "Identifier",
-                                                                                        "name": "newVal"
-                                                                                    },
-                                                                                    "consequent": {
-                                                                                        "type": "BlockStatement",
-                                                                                        "body": [
-                                                                                            {
-                                                                                                "type": "ExpressionStatement",
-                                                                                                "expression": {
-                                                                                                    "type": "CallExpression",
-                                                                                                    "callee": {
-                                                                                                        "type": "MemberExpression",
-                                                                                                        "computed": false,
-                                                                                                        "object": {
-                                                                                                            "type": "Identifier",
-                                                                                                            "name": "console"
-                                                                                                        },
-                                                                                                        "property": {
-                                                                                                            "type": "Identifier",
-                                                                                                            "name": "log"
-                                                                                                        }
-                                                                                                    },
-                                                                                                    "arguments": [
-                                                                                                        {
-                                                                                                            "type": "MemberExpression",
-                                                                                                            "computed": false,
-                                                                                                            "object": {
-                                                                                                                "type": "MemberExpression",
-                                                                                                                "computed": false,
-                                                                                                                "object": {
-                                                                                                                    "type": "Identifier",
-                                                                                                                    "name": "$scope"
-                                                                                                                },
-                                                                                                                "property": {
-                                                                                                                    "type": "Identifier",
-                                                                                                                    "name": "state"
-                                                                                                                }
-                                                                                                            },
-                                                                                                            "property": {
-                                                                                                                "type": "Identifier",
-                                                                                                                "name": "selectedOption"
-                                                                                                            }
-                                                                                                        }
-                                                                                                    ]
-                                                                                                }
-                                                                                            }
-                                                                                        ]
-                                                                                    },
-                                                                                    "alternate": null
-                                                                                }
-                                                                            ]
-                                                                        }
-                                                                    }
-                                                                ]
-                                                            }
-                                                        },
-                                                        {
-                                                            "type": "ExpressionStatement",
-                                                            "expression": {
-                                                                "type": "AssignmentExpression",
-                                                                "operator": "=",
-                                                                "left": {
-                                                                    "type": "MemberExpression",
-                                                                    "computed": false,
-                                                                    "object": {
-                                                                        "type": "Identifier",
-                                                                        "name": "$scope"
-                                                                    },
-                                                                    "property": {
-                                                                        "type": "Identifier",
-                                                                        "name": "onAdd"
-                                                                    }
-                                                                },
-                                                                "right": {
-                                                                    "type": "FunctionExpression",
-                                                                    "id": null,
-                                                                    "params": [],
-                                                                    "body": {
-                                                                        "type": "BlockStatement",
-                                                                        "body": [
-                                                                            {
-                                                                                "type": "VariableDeclaration",
-                                                                                "declarations": [
-                                                                                    {
-                                                                                        "type": "VariableDeclarator",
-                                                                                        "id": {
-                                                                                            "type": "Identifier",
-                                                                                            "name": "node"
-                                                                                        },
-                                                                                        "init": {
-                                                                                            "type": "CallExpression",
-                                                                                            "callee": {
-                                                                                                "type": "MemberExpression",
-                                                                                                "computed": false,
-                                                                                                "object": {
-                                                                                                    "type": "Identifier",
-                                                                                                    "name": "NodeService"
-                                                                                                },
-                                                                                                "property": {
-                                                                                                    "type": "Identifier",
-                                                                                                    "name": "addNode"
-                                                                                                }
-                                                                                            },
-                                                                                            "arguments": [
-                                                                                                {
-                                                                                                    "type": "MemberExpression",
-                                                                                                    "computed": false,
-                                                                                                    "object": {
-                                                                                                        "type": "MemberExpression",
-                                                                                                        "computed": false,
-                                                                                                        "object": {
-                                                                                                            "type": "Identifier",
-                                                                                                            "name": "$scope"
-                                                                                                        },
-                                                                                                        "property": {
-                                                                                                            "type": "Identifier",
-                                                                                                            "name": "state"
-                                                                                                        }
-                                                                                                    },
-                                                                                                    "property": {
-                                                                                                        "type": "Identifier",
-                                                                                                        "name": "selectedOption"
-                                                                                                    }
-                                                                                                }
-                                                                                            ]
-                                                                                        }
-                                                                                    }
-                                                                                ],
-                                                                                "kind": "var"
-                                                                            },
-                                                                            {
-                                                                                "type": "ExpressionStatement",
-                                                                                "expression": {
-                                                                                    "type": "AssignmentExpression",
-                                                                                    "operator": "=",
-                                                                                    "left": {
-                                                                                        "type": "MemberExpression",
-                                                                                        "computed": false,
-                                                                                        "object": {
-                                                                                            "type": "MemberExpression",
-                                                                                            "computed": false,
-                                                                                            "object": {
-                                                                                                "type": "Identifier",
-                                                                                                "name": "$scope"
-                                                                                            },
-                                                                                            "property": {
-                                                                                                "type": "Identifier",
-                                                                                                "name": "state"
-                                                                                            }
-                                                                                        },
-                                                                                        "property": {
-                                                                                            "type": "Identifier",
-                                                                                            "name": "selectedOption"
-                                                                                        }
-                                                                                    },
-                                                                                    "right": {
-                                                                                        "type": "Literal",
-                                                                                        "value": ""
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        ]
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            },
-            "arguments": []
-        }
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "Keyword",
+        "value": "function"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": "{"
+    },
+    {
+        "type": "Keyword",
+        "value": "var"
+    },
+    {
+        "type": "Identifier",
+        "value": "controllers"
+    },
+    {
+        "type": "Punctuator",
+        "value": "="
+    },
+    {
+        "type": "Identifier",
+        "value": "angular"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "module"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "String",
+        "value": "\"layout\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Identifier",
+        "value": "controllers"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "controller"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "String",
+        "value": "\"OverlayController\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "Punctuator",
+        "value": "["
+    },
+    {
+        "type": "String",
+        "value": "'$scope'"
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "String",
+        "value": "'NodeService'"
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "Keyword",
+        "value": "function"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "Identifier",
+        "value": "$scope"
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "Identifier",
+        "value": "NodeService"
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": "{"
+    },
+    {
+        "type": "Identifier",
+        "value": "$scope"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "options"
+    },
+    {
+        "type": "Punctuator",
+        "value": "="
+    },
+    {
+        "type": "Punctuator",
+        "value": "["
+    },
+    {
+        "type": "String",
+        "value": "\"Box\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "String",
+        "value": "\"Link\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "String",
+        "value": "\"List\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "String",
+        "value": "\"Text\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "String",
+        "value": "\"Input\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "String",
+        "value": "\"Button\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "String",
+        "value": "\"Image\""
+    },
+    {
+        "type": "Punctuator",
+        "value": "]"
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Identifier",
+        "value": "$scope"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "state"
+    },
+    {
+        "type": "Punctuator",
+        "value": "="
+    },
+    {
+        "type": "Punctuator",
+        "value": "{"
+    },
+    {
+        "type": "Punctuator",
+        "value": "}"
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Identifier",
+        "value": "$scope"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "state"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "selectedOption"
+    },
+    {
+        "type": "Punctuator",
+        "value": "="
+    },
+    {
+        "type": "String",
+        "value": "\"\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Identifier",
+        "value": "$scope"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "$watch"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "String",
+        "value": "\"state.selectedOption\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ","
+    },
+    {
+        "type": "Keyword",
+        "value": "function"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "Identifier",
+        "value": "newVal"
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": "{"
+    },
+    {
+        "type": "Keyword",
+        "value": "if"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "Identifier",
+        "value": "newVal"
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": "{"
+    },
+    {
+        "type": "Identifier",
+        "value": "console"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "log"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "Identifier",
+        "value": "$scope"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "state"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "selectedOption"
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Punctuator",
+        "value": "}"
+    },
+    {
+        "type": "Punctuator",
+        "value": "}"
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Identifier",
+        "value": "$scope"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "onAdd"
+    },
+    {
+        "type": "Punctuator",
+        "value": "="
+    },
+    {
+        "type": "Keyword",
+        "value": "function"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": "{"
+    },
+    {
+        "type": "Keyword",
+        "value": "var"
+    },
+    {
+        "type": "Identifier",
+        "value": "node"
+    },
+    {
+        "type": "Punctuator",
+        "value": "="
+    },
+    {
+        "type": "Identifier",
+        "value": "NodeService"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "addNode"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "Identifier",
+        "value": "$scope"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "state"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "selectedOption"
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Identifier",
+        "value": "$scope"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "state"
+    },
+    {
+        "type": "Punctuator",
+        "value": "."
+    },
+    {
+        "type": "Identifier",
+        "value": "selectedOption"
+    },
+    {
+        "type": "Punctuator",
+        "value": "="
+    },
+    {
+        "type": "String",
+        "value": "\"\""
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Punctuator",
+        "value": "}"
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Punctuator",
+        "value": "}"
+    },
+    {
+        "type": "Punctuator",
+        "value": "]"
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
+    },
+    {
+        "type": "Punctuator",
+        "value": "}"
+    },
+    {
+        "type": "Punctuator",
+        "value": "("
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": ")"
+    },
+    {
+        "type": "Punctuator",
+        "value": ";"
     }
-]}
+]
