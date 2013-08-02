@@ -1,0 +1,12 @@
+{
+    "name": "Ngprima"
+  , "description": "AngularJS analysis with Esprima"
+  , "version": "0.0.1"
+  , "keywords": ["angular", "esprima"]
+  , "homepage": "http://www.nebithi.com"
+  , "author": "Ganaraj P R"
+  , "devDependencies": {
+      "esprima": "latest"
+    , "verbal-expressions": "latest"
+  }
+}
