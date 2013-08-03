@@ -67,7 +67,9 @@ function matchTemplate(code, template) {
             console.log(varList[j].name + " : " + varList[j].value)
 
         }
+        return varList
     }
+    return;
 }
 
 if (process.argv.length < 4) {
