@@ -8,5 +8,6 @@
   , "devDependencies": {
       "esprima": "latest"
     , "verbal-expressions": "latest"
+    , "escodegen": "latest"
   }
 }

@@ -1,6 +1,7 @@
 var fs = require('fs'),
     esprima = require('esprima');
 var VerEx = require("verbal-expressions");
+var cq = require('./codequery/codequery')
 
 
 
@@ -87,5 +88,11 @@ console.log('Reading ' + filename1);
 var tpl = fs.readFileSync(filename1);
 
 
-analyzeCode(code, tpl);
+//analyzeCode(code, tpl);
+function testCode(code) {
+    var ast = cq.parse(code);
+    cq.getAllAssignments(ast);
+}
+
+testCode(code);
 console.log('Done');
