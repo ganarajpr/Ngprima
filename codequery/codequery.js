@@ -28,13 +28,22 @@ exports.parse = function(code){
 };
 
 exports.getAllAssignments = function(ast){
-    var funcExpressions = [];
+    var assignments = [];
     traverse(ast, function(node) {
         if(node.type === "AssignmentExpression" && node.operator === "=") {
-            //if (node.right.type === "FunctionExpression") {
-                console.log(escodegen.generate(node));
-                funcExpressions.push(node);
-            //}
+            //console.log(escodegen.generate(node));
+            assignments.push(node);
         }
     });
+    return assignments;
 };
+
+exports.whereObject = function(ast,objectName){
+    var matchFound = false;
+    traverse(ast, function(node) {
+        if(node.type === "MemberExpression" && node.object.name === objectName) {
+            matchFound = true;
+        }
+    });
+    return matchFound;
+}

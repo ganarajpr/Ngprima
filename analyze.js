@@ -1,7 +1,8 @@
 var fs = require('fs'),
     esprima = require('esprima');
 var VerEx = require("verbal-expressions");
-var cq = require('./codequery/codequery')
+var cq = require('./codequery/codequery');
+var escodegen = require('escodegen');
 
 
 
@@ -73,25 +74,34 @@ function matchTemplate(code, template) {
     return;
 }
 
-if (process.argv.length < 4) {
+/*if (process.argv.length < 4) {
     console.log('Usage: analyze.js file.js templatefile.js');
     process.exit(1);
-}
+}*/
 
-var filename = process.argv[2];
-console.log('Reading ' + filename);
-var code = fs.readFileSync(filename);
+//var filename = process.argv[2];
+//console.log('Reading ' + filename);
+var code = fs.readFileSync("test.js");
 
 
-var filename1 = process.argv[3];
-console.log('Reading ' + filename1);
-var tpl = fs.readFileSync(filename1);
+//var filename1 = process.argv[3];
+//console.log('Reading ' + filename1);
+//var tpl = fs.readFileSync(filename1);
 
 
 //analyzeCode(code, tpl);
 function testCode(code) {
     var ast = cq.parse(code);
-    cq.getAllAssignments(ast);
+    var assigns = cq.getAllAssignments(ast);
+    assigns.forEach(function(obj){
+        if(cq.whereObject(obj,"node")){
+            console.log(escodegen.generate(obj));
+        }
+    })
+
+    /*hits.forEach(function(hit){
+        console.log(escodegen.generate(hit));
+    })*/
 }
 
 testCode(code);

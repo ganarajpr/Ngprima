@@ -24,6 +24,7 @@
 
             $scope.onAdd = function(){
                 var node = NodeService.addNode($scope.state.selectedOption);
+                node.abc = "bbc";
                 //node.properties.
                 $scope.state.selectedOption = "";
             };
