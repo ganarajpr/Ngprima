@@ -27,14 +27,42 @@ exports.parse = function(code){
     return ast;
 };
 
+exports.getAllFunctions = function(ast){
+    var funcs = [];
+    function onFunc(node) {
+        if(node.type === "FunctionExpression" || node.type === "FunctionDeclaration") {
+            funcs.push(node);
+        }
+    }
+    if(Array.isArray(ast)){
+        ast.forEach(function(ast1){
+            traverse(ast1, onFunc);
+        });
+    }
+    else{
+        traverse(ast, onFunc);
+    }
+
+    return funcs;
+};
+
+
 exports.getAllAssignments = function(ast){
     var assignments = [];
-    traverse(ast, function(node) {
+    function onNode(node) {
         if(node.type === "AssignmentExpression" && node.operator === "=") {
-            //console.log(escodegen.generate(node));
             assignments.push(node);
         }
-    });
+    }
+    if(Array.isArray(ast)){
+       ast.forEach(function(ast1){
+           traverse(ast1, onNode);
+       });
+    }
+    else{
+        traverse(ast, onNode);
+    }
+
     return assignments;
 };
 

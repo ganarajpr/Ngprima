@@ -1,7 +1,6 @@
 (function () {
-    var controllers = angular.module("layout");
-
-    controllers.controller("OverlayController", [
+    angular.module("layout")
+        .controller("OverlayController", [
         '$scope',
         'NodeService',
         function ($scope,NodeService) {
@@ -21,15 +20,29 @@
                     console.log($scope.state.selectedOption);
                 }
             });
+            nutan.$watch("state.selectedOption",function(newVal){
+                if(newVal){
+                    console.log($scope.state.selectedOption);
+                }
+            });
+            log();
 
+            $scope.log();
+            tre.abc.log().log();
             $scope.onAdd = function(){
                 var node = NodeService.addNode($scope.state.selectedOption);
                 node.abc = "bbc";
+                console.log(node.abc);
                 //node.properties.
                 $scope.state.selectedOption = "";
             };
+
         }
     ]);
+    angular.module("layout");
+    $scope.controller();
+
+
 }());
 
 

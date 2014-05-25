@@ -1,7 +1,8 @@
 var fs = require('fs'),
     esprima = require('esprima');
 var VerEx = require("verbal-expressions");
-var cq = require('./codequery/codequery');
+//var cq = require('./codequery/codequery');
+var CQ = require('./codequery/cq');
 var escodegen = require('escodegen');
 
 
@@ -91,18 +92,20 @@ var code = fs.readFileSync("test.js");
 
 //analyzeCode(code, tpl);
 function testCode(code) {
-    var ast = cq.parse(code);
-    var assigns = cq.getAllAssignments(ast);
-    assigns.forEach(function(obj){
-        if(cq.whereObject(obj,"node")){
-            console.log(escodegen.generate(obj));
-        }
-    })
+    var cq = new CQ(code);
+    var calls = cq
+        .callsToFunction("controller")
+        //.caller('angular.module("layout")');
+        .caller('$scope');
+        //.callsToFunction("log")
+        //.caller('tre.abc.log()');
+        //.callsToFunction("log")
+        //.caller(null);
 
-    /*hits.forEach(function(hit){
-        console.log(escodegen.generate(hit));
-    })*/
+    var logger = calls.toString();
+    console.log(logger);
 }
 
 testCode(code);
 console.log('Done');
+
