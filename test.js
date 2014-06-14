@@ -25,6 +25,13 @@
                     console.log($scope.state.selectedOption);
                 }
             });
+            
+            for( var i = 0 ; i < nutan.length;i++){
+                $scope.addInLoop = function(){
+                    var node = NodeService.addNode($scope.state.selectedOption);
+                };    
+            }
+
             log();
 
             $scope.log();

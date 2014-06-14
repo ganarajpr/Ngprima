@@ -8,7 +8,6 @@ var esprimaOptions = {
     comment: true,
     range: true,
     loc: false,
-    tokens: true,
     raw: false
 };
 
@@ -29,9 +28,25 @@ var cq = module.exports = function (code) {
     cq.rootContext.print();
 };
 
+function Context(ast,parentContext,type,name){
+    this.childContexts = [];
+    this.parentContext = parentContext;
+    this.ast = ast;
+    this.type = type;
+    this.name = name;
+    this.variables = [];
+    if(parentContext){
+        parentContext.childContexts.push(this);
+    }
+    this.init();
+}
+
 Context.prototype.print = function(){
     console.log(this.name);
-    console.log(this.variables,this.functions);
+    var vars = this.variables.map(function(variable){
+        return variable.name;
+    })
+    console.log(vars);
     this.childContexts.forEach(function(context){
         context.print();
     })
@@ -42,29 +57,22 @@ Context.prototype.toString = function () {
     return escodegen.generate(this.ast, escodegenOptions);
 };
 
-
-function Context(ast,parentContext,type,name){
-    this.childContexts = [];
-    this.parentContext = parentContext;
-    this.ast = ast;
-    this.type = type;
-    this.name = name;
-    this.variables = [];
-    this.functions = [];
-    if(parentContext){
-        parentContext.childContexts.push(this);
-    }
-    this.init();
-}
-
 Context.prototype.init = function(){
-    process(this);
+    var body = getBody(this.ast);
+    processBodyofStatements(this,body);
+};
+
+Context.prototype.get = function(type){
+    
+};
+
+Context.prototype.create = function(type){
+    
 };
 
 
-function getBody(context){
+function getBody(ast){
     var body;
-    var ast = context.ast;
     if(_.isArray(ast.body)){
         body = ast.body;
     }
@@ -79,8 +87,7 @@ function getBody(context){
     return body;
 }
 
-function process(context){
-    var body = getBody(context);
+function processBodyofStatements(context,body){
     if( body && body.length){
         body.forEach(function(expr){
             switch (expr.type){
@@ -90,16 +97,42 @@ function process(context){
                     }
                 break;
                 case "FunctionDeclaration":
-                    processFunctionDeclaration(context,expr);
+                    processFunctionDeclaration(context,expr,"",expr.params);
                 break;
                 case "ExpressionStatement":
                     processExpressionStatement(context,expr);
+                break;
+                case "ForStatement":
+                    processForStatement(context,expr);
+                break;
+                case "IfStatement":
+                    processIfStatement(context,expr);
                 break;
                 default:
                     //console.log("Unprocessed expression : ", expr.type);
             }
         });
     }
+}
+
+function processIfStatement(context,expr){
+    if(expr.consequent && expr.consequent.type === "BlockStatement"){
+        var body = getBody(expr.consequent);
+        processBodyofStatements(context,body);
+    }
+    if(expr.alternate && expr.alternate.type === "BlockStatement"){
+        var body = getBody(expr.alternate);
+        processBodyofStatements(context,body);
+    }
+}
+
+
+function processForStatement(context,expr){
+    if(expr.init && expr.init.type === "VariableDeclaration"){
+        processVariableDeclarations(context,expr.init);
+    }
+    var body = getBody(expr);
+    processBodyofStatements(context,body);
 }
 
 
@@ -110,7 +143,10 @@ function processExpressionStatement(context,expr){
             processAssignment(context,expr);
         break;
         case "CallExpression":
-            processFunctionCall(context,expr);
+            processFunctionCall(context,expression);
+        break;
+        case "ArrayExpression":
+            processArray(context,expression);
         break;
         default:
             //console.log("Unprocessed expression : ", expr.type);
@@ -118,12 +154,54 @@ function processExpressionStatement(context,expr){
 }
 
 function processAssignment(context,expr){
-    
-    var expression = expr.expression;
+    var expression = expr.expression ? expr.expression : expr;
     if(expression.right.type === "FunctionExpression"){
-        console.log(escodegen.generate(expr));
-        processFunctionDeclaration(context,expression.right,getAssignmentLeft(expression));
+        processFunctionDeclaration(context,expression.right,getAssignmentLeft(expression),expression.right.params);
     }
+    else if(expression.right.type === "ArrayExpression"){
+        processArray(context,expression.right);
+    }
+}
+
+
+function processArray(context,expr){
+    expr.elements.forEach(function(element){
+        if(element.type === "FunctionExpression"){
+            processFunctionDeclaration(context,element,"",element.params);
+        }
+    })
+}
+
+function resolveMemberExpression(expr){
+    var accessor = "";
+    if(expr.type === "Identifier"){
+        accessor = expr.name;
+    }
+    if(expr.type === "MemberExpression"){
+        if(expr.object.type === "MemberExpression"){
+            accessor += resolveMemberExpression(expr.object) + ".";
+        }
+        else if (expr.object.type === "Identifier"){
+            accessor = expr.object.name + ".";
+        }
+        
+        accessor += expr.property.name;
+    }
+    return accessor;
+}
+
+function fullAccessor(expr){
+    var str = resolveMemberExpression(expr);
+    var splitString = str.split(".");
+    var capsStrings = splitString.map(function(str){
+        return capitalize(str);
+    });
+    return capsStrings.join("");
+}
+
+function capitalize(str){
+    str = str.substring(0,1).toUpperCase() + str.substring(1);
+    return str;
 }
                                    
 function getAssignmentLeft(expr){
@@ -138,31 +216,59 @@ function getAssignmentLeft(expr){
 }                               
 
 function processFunctionCall(context,expr){
-    
+    if(expr.callee.type === "FunctionExpression"){
+        processFunctionDeclaration(context,expr.callee,"",expr.callee.params);
+    }
+    else if ( expr.arguments.length){
+        expr.arguments.forEach(function(arg){
+            if(arg.type === "FunctionExpression"){
+                processFunctionDeclaration(context,arg,fullAccessor(expr.callee),arg.params);
+            }
+            if(arg.type === "ArrayExpression"){
+                processArray(context,arg);
+            }
+        });
+    }
 }
 
-
+function addParams(context,params){
+    for(var i=0;i<params.length;i++){
+        if(params[i].type === "Identifier"){
+            context.variables.push(new Variable(params[i].name,context.ast,context));
+        }
+    }
+}
 
 function processVariableDeclarations(context,expr){
     var declarations = expr.declarations;
     declarations.forEach(function(decl){
         if(decl.type === "VariableDeclarator"){
-            context.variables.push(decl.id.name);
+            context.variables.push(new Variable(decl.id.name,expr,context));
+            if(decl.init ) {
+                if(decl.init.type === "FunctionExpression"){
+                    processFunctionDeclaration(context,decl.init,decl.id.name,decl.init.params);
+                }
+                if(decl.init.type === "AssignmentExpression"){
+                    processAssignment(context,decl.init);
+                }
+            }
         }
     });
 }
 
-function processFunctionDeclaration(context,expr, name){
+function processFunctionDeclaration(context,expr, name,params){
     var funcName = expr.id ? expr.id.name : name;
     context.functions.push(funcName);
-    new Context(expr,context,expr.type,funcName);
+    var ctx = new Context(expr,context,expr.type,funcName);
+    addParams(ctx,params);
 }
 
-Context.prototype.get = function(type){
-    
-};
 
-Context.prototype.create = function(type){
-    
-};
+function Variable(name,ast,context){
+    this.name = name;
+    this.ast = ast;
+    this.context = context;
+}
+
+
 
