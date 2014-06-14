@@ -258,7 +258,6 @@ function processVariableDeclarations(context,expr){
 
 function processFunctionDeclaration(context,expr, name,params){
     var funcName = expr.id ? expr.id.name : name;
-    context.functions.push(funcName);
     var ctx = new Context(expr,context,expr.type,funcName);
     addParams(ctx,params);
 }
