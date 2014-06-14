@@ -35,6 +35,11 @@ function Context(ast,parentContext,type,name){
     this.type = type;
     this.name = name;
     this.variables = [];
+    
+    //insertion points 
+    // each child block statement is an insertion point.
+    //we have block statements for For, If, Else, Switch etc. 
+    
     if(parentContext){
         parentContext.childContexts.push(this);
     }
@@ -108,6 +113,9 @@ function processBodyofStatements(context,body){
                 case "IfStatement":
                     processIfStatement(context,expr);
                 break;
+                case "SwitchStatement":
+                    processSwitchStatement(context,expr);
+                break;
                 default:
                     //console.log("Unprocessed expression : ", expr.type);
             }
@@ -123,6 +131,15 @@ function processIfStatement(context,expr){
     if(expr.alternate && expr.alternate.type === "BlockStatement"){
         var body = getBody(expr.alternate);
         processBodyofStatements(context,body);
+    }
+}
+
+
+function processSwitchStatement(context,expr){
+    if(expr.cases && expr.cases.length){
+        expr.cases.forEach(function(eachCase){
+            processBodyofStatements(context,eachCase.consequent);
+        });
     }
 }
 
