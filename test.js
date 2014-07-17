@@ -59,7 +59,9 @@
     ]);
     angular.module("layout");
     $scope.controller();
+     var a = m.q.x = function(){
 
+     };
 
 }());
 

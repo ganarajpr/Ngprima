@@ -314,8 +314,9 @@ function processAssignment(context,expr){
     }
     else{
         processExpressionStatement(context,expression.right);
-        processExpressionStatement(context,expression.left);
+
     }
+    processExpressionStatement(context,expression.left);
 }
 
 
