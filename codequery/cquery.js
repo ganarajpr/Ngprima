@@ -294,9 +294,11 @@ function processExpressionStatement(context,expr){
 
         break;
         case "UpdateExpression":
+        case "UnaryExpression":
             processExpressionStatement(context,expression.argument);
         break;
         case "BinaryExpression":
+        case "LogicalExpression":
             processExpressionStatement(context,expression.left);
             processExpressionStatement(context,expression.right);
         break;
