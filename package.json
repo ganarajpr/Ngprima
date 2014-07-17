@@ -10,4 +10,8 @@
     , "verbal-expressions": "latest"
     , "escodegen": "latest"
   }
+    ,"dependencies" : {
+        "lodash" : "latest"
+
+    }
 }

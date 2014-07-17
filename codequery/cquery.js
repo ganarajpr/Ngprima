@@ -21,12 +21,14 @@ var escodegenOptions = {
 };
 
 var contexts = [];
-var cq = module.exports = function (code) {
-    this.ast = esprima.parse(code, esprimaOptions);
-    this.code = code;
-    cq.rootContext = new Context(this.ast,null,this.ast.type,"__$$PROGRAM$$__");
-    cq.rootContext.print();
+var cq = module.exports.process = function (code) {
+    var ast = esprima.parse(code, esprimaOptions);
+    var rootContext = new Context(ast,null,ast.type,"__$$PROGRAM$$__");
+    rootContext.processExternals();
+    return rootContext;
 };
+
+
 
 function Context(ast,parentContext,type,name){
     this.childContexts = [];
@@ -35,7 +37,11 @@ function Context(ast,parentContext,type,name){
     this.type = type;
     this.name = name;
     this.variables = [];
-    
+    this.forLoops = [];
+    this.SwitchStatements = [];
+    this.expressions = [];
+    this.ifs = [];
+    this.externals = [];
     //insertion points 
     // each child block statement is an insertion point.
     //we have block statements for For, If, Else, Switch etc. 
@@ -50,12 +56,19 @@ Context.prototype.print = function(){
     console.log(this.name);
     var vars = this.variables.map(function(variable){
         return variable.name;
-    })
+    });
+    console.log("Variables");
     console.log(vars);
+    console.log("Expressions");
+    console.log(this.expressions);
     this.childContexts.forEach(function(context){
         context.print();
     })
 }
+
+Context.prototype.processExternals = function(){
+
+};
 
 
 Context.prototype.toString = function () {
@@ -67,8 +80,10 @@ Context.prototype.init = function(){
     processBodyofStatements(this,body);
 };
 
-Context.prototype.get = function(type){
-    
+Context.prototype.getFunctionByPosition = function(position){
+    if(this.childContexts.length > position)
+        return this.childContexts[position];
+    return null;
 };
 
 Context.prototype.create = function(type){
@@ -86,7 +101,7 @@ function getBody(ast){
             body = ast.body.body;
         }
         else{
-            console.log(ast.body.type);
+            //console.log(ast.body.type);
         }
     }
     return body;
@@ -110,6 +125,15 @@ function processBodyofStatements(context,body){
                 case "ForStatement":
                     processForStatement(context,expr);
                 break;
+                case "ForInStatement":
+                    processForInStatement(context,expr);
+                    break;
+                case "WhileStatement":
+                    processWhileStatement(context,expr);
+                break;
+                case "DoWhileStatement":
+                    processWhileStatement(context,expr);
+                break;
                 case "IfStatement":
                     processIfStatement(context,expr);
                 break;
@@ -117,13 +141,44 @@ function processBodyofStatements(context,body){
                     processSwitchStatement(context,expr);
                 break;
                 default:
-                    //console.log("Unprocessed expression : ", expr.type);
+                    ////console.log("Unprocessed expression : ", expr.type);
             }
         });
     }
 }
 
+function processSequenceExpression(context, expr) {
+    expr.expressions.forEach(function(expression){
+        storeExpression(context,expression);
+    });
+}
+function storeExpression(context,expr){
+    if(expr.type === "MemberExpression"){
+        context.expressions.push(resolveMemberExpression(expr));
+    }
+    if(expr.type === "Identifier"){
+        context.expressions.push(expr.name);
+    }
+    if(expr.type === "CallExpression"){
+        context.expressions.push(getCallee(expr.callee));
+    }
+    if(expr.type === "BinaryExpression"){
+        storeExpression(context,expr.left);
+        storeExpression(context,expr.right);
+    }
+    if(expr.type === "UpdateExpression"){
+        storeExpression(context,expr.argument);
+    }
+    if(expr.type === "SequenceExpression"){
+        processSequenceExpression(context,expr);
+    }
+}
+
+
+
 function processIfStatement(context,expr){
+    context.ifs.push(expr);
+    storeExpression(context,expr.test);
     if(expr.consequent && expr.consequent.type === "BlockStatement"){
         var body = getBody(expr.consequent);
         processBodyofStatements(context,body);
@@ -136,6 +191,7 @@ function processIfStatement(context,expr){
 
 
 function processSwitchStatement(context,expr){
+    context.SwitchStatements.push(expr);
     if(expr.cases && expr.cases.length){
         expr.cases.forEach(function(eachCase){
             processBodyofStatements(context,eachCase.consequent);
@@ -145,16 +201,65 @@ function processSwitchStatement(context,expr){
 
 
 function processForStatement(context,expr){
-    if(expr.init && expr.init.type === "VariableDeclaration"){
-        processVariableDeclarations(context,expr.init);
+    if(expr.init){
+        if(expr.init.type === "VariableDeclaration"){
+            processVariableDeclarations(context,expr.init);
+        }
+        else{
+            storeExpression(context,expr.init);
+        }
+    }
+    if(expr.test){
+        storeExpression(context,expr.test);
+    }
+    if(expr.update){
+        storeExpression(context,expr.update);
+    }
+    context.forLoops.push(expr);
+    var body = getBody(expr);
+    processBodyofStatements(context,body);
+}
+
+function processForInStatement(context,expr){
+    if(expr.left){
+        if(expr.left.type === "VariableDeclaration"){
+            processVariableDeclarations(context,expr.left);
+        }
+        else{
+            storeExpression(context,expr.left);
+        }
+    }
+    if(expr.right){
+        storeExpression(context,expr.right);
+    }
+    context.forLoops.push(expr);
+    var body = getBody(expr);
+    processBodyofStatements(context,body);
+}
+
+function processWhileStatement(context,expr){
+    if(expr.test){
+        storeExpression(context,expr.test);
     }
     var body = getBody(expr);
     processBodyofStatements(context,body);
 }
 
 
+function processConditionalExpression(context, expression) {
+    processExpressionStatement(context,expression.test);
+    processExpressionStatement(context,expression.consequent);
+    processExpressionStatement(context,expression.alternate);
+}
+function processNewExpression(context, expression) {
+    processExpressionStatement(context,expression.callee);
+    expression.arguments.forEach(function(arg){
+        processExpressionStatement(context,arg);
+    });
+}
+
 function processExpressionStatement(context,expr){
-    var expression = expr.expression;
+    var expression = expr.expression ? expr.expression : expr;
     switch (expression.type){
         case "AssignmentExpression" :
             processAssignment(context,expr);
@@ -165,9 +270,41 @@ function processExpressionStatement(context,expr){
         case "ArrayExpression":
             processArray(context,expression);
         break;
+        case "Literal":
+        case "ObjectExpression":
+        case "ThisExpression":
+        break;
+
+        case "NewExpression":
+            processNewExpression(context,expression);
+        break;
+
+        case "MemberExpression":
+        case "Identifier":
+            storeExpression(context,expression);
+        break;
+
+        case "ExpressionStatement":
+            processExpressionStatement(context,expression);
+        break;
+        case "ConditionalExpression":
+            processConditionalExpression(context,expression);
+        break;
+        case "FunctionExpression":
+
+        break;
+        case "UpdateExpression":
+            processExpressionStatement(context,expression.argument);
+        break;
+        case "BinaryExpression":
+            processExpressionStatement(context,expression.left);
+            processExpressionStatement(context,expression.right);
+        break;
         default:
-            //console.log("Unprocessed expression : ", expr.type);
+            console.log("Unprocessed expression : ", expression);
+
     }
+    //storeExpression(context,expression);
 }
 
 function processAssignment(context,expr){
@@ -175,8 +312,9 @@ function processAssignment(context,expr){
     if(expression.right.type === "FunctionExpression"){
         processFunctionDeclaration(context,expression.right,getAssignmentLeft(expression),expression.right.params);
     }
-    else if(expression.right.type === "ArrayExpression"){
-        processArray(context,expression.right);
+    else{
+        processExpressionStatement(context,expression.right);
+        processExpressionStatement(context,expression.left);
     }
 }
 
@@ -185,6 +323,9 @@ function processArray(context,expr){
     expr.elements.forEach(function(element){
         if(element.type === "FunctionExpression"){
             processFunctionDeclaration(context,element,"",element.params);
+        }
+        else{
+            processExpressionStatement(context,element);
         }
     })
 }
@@ -201,6 +342,12 @@ function resolveMemberExpression(expr){
         else if (expr.object.type === "Identifier"){
             accessor = expr.object.name + ".";
         }
+        else if( expr.object.type === "ThisExpression"){
+            accessor = "this" + ".";
+        }
+        else if (expr.object.type === "CallExpression"){
+            accessor += getCallee(expr.object.callee)+".";
+        }
         
         accessor += expr.property.name;
     }
@@ -210,9 +357,7 @@ function resolveMemberExpression(expr){
 function fullAccessor(expr){
     var str = resolveMemberExpression(expr);
     var splitString = str.split(".");
-    var capsStrings = splitString.map(function(str){
-        return capitalize(str);
-    });
+    var capsStrings = splitString.map(capitalize);
     return capsStrings.join("");
 }
 
@@ -230,20 +375,31 @@ function getAssignmentLeft(expr){
         left = expr.left.property.name;
     }
     return left;
-}                               
+}
+
+function getCallee(callee){
+    if(callee.type === "MemberExpression"){
+        return resolveMemberExpression(callee)+"()";
+    }
+    if(callee.type === "Identifier"){
+        return callee.name+"()";
+    }
+    if(callee.type === "CallExpression"){
+        return getCallee(callee.callee)+"()";
+    }
+}
 
 function processFunctionCall(context,expr){
     if(expr.callee.type === "FunctionExpression"){
         processFunctionDeclaration(context,expr.callee,"",expr.callee.params);
     }
-    else if ( expr.arguments.length){
+    storeExpression(context,expr);
+    if ( expr.arguments.length){
         expr.arguments.forEach(function(arg){
             if(arg.type === "FunctionExpression"){
                 processFunctionDeclaration(context,arg,fullAccessor(expr.callee),arg.params);
             }
-            if(arg.type === "ArrayExpression"){
-                processArray(context,arg);
-            }
+            processExpressionStatement(context,arg);
         });
     }
 }
@@ -261,13 +417,12 @@ function processVariableDeclarations(context,expr){
     declarations.forEach(function(decl){
         if(decl.type === "VariableDeclarator"){
             context.variables.push(new Variable(decl.id.name,expr,context));
-            if(decl.init ) {
+            if(decl.init) {
                 if(decl.init.type === "FunctionExpression"){
                     processFunctionDeclaration(context,decl.init,decl.id.name,decl.init.params);
                 }
-                if(decl.init.type === "AssignmentExpression"){
-                    processAssignment(context,decl.init);
-                }
+                processExpressionStatement(context,decl.init);
+                storeExpression(context,decl.init);
             }
         }
     });
