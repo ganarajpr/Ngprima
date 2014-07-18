@@ -141,7 +141,7 @@ function processBodyofStatements(context,body){
                     processSwitchStatement(context,expr);
                 break;
                 default:
-                    ////console.log("Unprocessed expression : ", expr.type);
+                    console.log("Unprocessed expression : ", expr.type);
             }
         });
     }

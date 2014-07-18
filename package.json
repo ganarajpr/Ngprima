@@ -11,7 +11,8 @@
     , "escodegen": "latest"
   }
     ,"dependencies" : {
-        "lodash" : "latest"
+        "lodash" : "latest",
+        "jasmine-node" : "latest"
 
     }
 }
