@@ -31,7 +31,7 @@ Selection.prototype.getExternals = function(name){
 
 function filterExpressions(expr,vars){
     "use strict";
-    var externalExpr = _.clone(expr);
+    var externalExpr = _.uniq(expr);
     for (var i = 0; i < expr.length; i++) {
         var splitExpr = expr[i].split(".");
         for (var j = 0; j < vars.length; j++) {
@@ -39,7 +39,6 @@ function filterExpressions(expr,vars){
                 externalExpr[i] = undefined;
                 break;
             }
-
         }
     }
     externalExpr = _.compact(externalExpr);

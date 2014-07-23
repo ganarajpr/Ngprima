@@ -13,7 +13,7 @@ var code = fs.readFileSync("test.js");
 function testCode(fileName,code) {
     //var cq = new cquery(code);
     var sel = selector.process(code);
-    sel.context.print();
+    //sel.context.print();
 
 
     var ctx = sel.getContextByName("onAdd");
