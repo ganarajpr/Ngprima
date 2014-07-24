@@ -13,8 +13,10 @@ var code = fs.readFileSync("test.js");
 function testCode(fileName,code) {
     //var cq = new cquery(code);
     var sel = selector.process(code);
-    var ctx = sel.getFunctionByName('onAdd');
-    stubber.stub(ctx.externals);
+    var ctx = sel.getFunctionByName('OverlayController');
+    ctx.processExternals();
+    console.log(ctx.externals);
+    console.log(stubber.stub(ctx.externals));
 
     var vnames;
     vnames = ctx.variables.map(function(v){

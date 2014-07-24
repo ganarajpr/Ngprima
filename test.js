@@ -3,7 +3,7 @@
         .controller("OverlayController", [
         '$scope',
         'NodeService',
-        function ($scope,NodeService) {
+        function OverlayController($scope,NodeService) {
             $scope.options = [
                 "Box",
                 "Link",
@@ -38,7 +38,7 @@
 
             log();
             $scope.log();
-            tre.abc.log().log();
+            tre.abc.log().log().a();
             $scope.onAdd = function(){
                 var node = NodeService.addNode($scope.state.selectedOption);
                 node.abc = "bbc";

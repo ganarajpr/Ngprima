@@ -22,7 +22,6 @@ var contexts = [];
 var cq = module.exports.process = function (code) {
     var ast = esprima.parse(code, esprimaOptions);
     var rootContext = new Context(ast,null,ast.type,"__$$PROGRAM$$__");
-    rootContext.processExternals();
     return rootContext;
 };
 
@@ -48,7 +47,7 @@ function Context(ast,parentContext,type,name){
         parentContext.childContexts.push(this);
     }
     this.init();
-    this.processExternals();
+    //this.processExternals();
 }
 
 Context.prototype.print = function(){
@@ -73,7 +72,6 @@ Context.prototype.processExternals = function(){
     for (var i = 0; i < this.variables.length; i++) {
         delete groupedByFirst[this.variables[i].name];
     }
-
     var externals = _(groupedByFirst)
         .values()
         .flatten()
