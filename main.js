@@ -2,6 +2,7 @@ var fs = require('fs');
 //var cquery = require("./codequery/cquery");
 var selector = require("./codequery/selector");
 var stubber = require("./codequery/stubber");
+var create = require("./codequery/create");
 var escodegen = require("escodegen");
 
 //var code = fs.readFileSync("./codequery/cquery.js");
@@ -12,16 +13,23 @@ var code = fs.readFileSync("test.js");
 
 function testCode(fileName,code) {
     //var cq = new cquery(code);
-    var sel = selector.process(code);
+    /*var sel = selector.process(code);
     var ctx = sel.getFunctionByName('OverlayController');
     ctx.processExternals();
     console.log(ctx.externals);
-    console.log(stubber.stub(ctx.externals));
+    console.log(stubber.stub(ctx.externals));*/
 
-    var vnames;
+    /*var vnames;
     vnames = ctx.variables.map(function(v){
         return v.name;
-    });
+    });*/
+
+
+    var prg = new create.Program();
+    prg.addVariable('x');
+    prg.addVariable('y');
+    console.log(escodegen.generate(prg));
+
 
     //console.log(vnames);
     //console.log(escodegen.generate(ctx.ast));
