@@ -79,9 +79,6 @@ Context.prototype.processExternals = function(){
         .flatten()
         .uniq();
 
-    console.log(this.name);
-    console.log(_.pluck(this.variables,'name'));
-    console.log(externals.value());
     this.externals = externals.value();
 };
 

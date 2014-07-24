@@ -44,6 +44,7 @@
                 node.abc = "bbc";
                 console.log(node.abc);
                 node.properties;
+                $scope.a;
                 a;
                 b().a;
                 do {

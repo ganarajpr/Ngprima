@@ -1,6 +1,7 @@
 var fs = require('fs');
 //var cquery = require("./codequery/cquery");
 var selector = require("./codequery/selector");
+var stubber = require("./codequery/stubber");
 var escodegen = require("escodegen");
 
 //var code = fs.readFileSync("./codequery/cquery.js");
@@ -13,7 +14,8 @@ function testCode(fileName,code) {
     //var cq = new cquery(code);
     var sel = selector.process(code);
     var ctx = sel.getFunctionByName('onAdd');
-    //console.log(ctx.expressions);
+    stubber.stub(ctx.externals);
+
     var vnames;
     vnames = ctx.variables.map(function(v){
         return v.name;
