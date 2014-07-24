@@ -41,6 +41,29 @@ function namespace(namespaceString,parent) {
     return parent;
 }
 
+
+function generate(parts){
+    "use strict";
+    var returnString = '';
+    if(parts.length > 1){
+        if(isFunction(_.first(parts))){
+            returnString += getFuncName(_.first(parts)) + ':function(){ return {' + generate(_.rest(parts)) + '}; }';
+        }
+        else{
+            returnString += _.first(parts) +': {'+ generate(_.rest(parts)) + '}';
+        }
+    }
+    else{
+        if(isFunction(_.first(parts))){
+            returnString += getFuncName(_.first(parts)) + ':function(){ return; ' + '}';
+        }
+        else{
+            returnString += _.first(parts) +': {'+ '}';
+        }
+    }
+    return returnString;
+}
+
 function addReturnValue(parts,currentIndex){
     "use strict";
     var str = '';
@@ -69,10 +92,13 @@ function addReturnValue(parts,currentIndex){
 
 module.exports = {
     stub : function (expressions){
-        var parent = {};
+        var generated = ''
         for (var i = 0; i < expressions.length; i++) {
-            namespace(expressions[i],parent);
+            var expr = expressions[i];
+            var parts = expr.split('.');
+            generated += generate(parts);
         }
-        return JSON.stringify(parent);
+        return generated;
+        //return JSON.stringify(parent);
     }
 };
