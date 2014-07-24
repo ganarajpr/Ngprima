@@ -1,8 +1,6 @@
 var esprima = require("esprima");
 var escodegen = require("escodegen");
-var traverse = require("traverse");
-var _ = require("underscore");
-var jsel = require("JSONSelect");
+var _ = require("lodash");
 
 var esprimaOptions = {
     comment: true,
@@ -50,6 +48,7 @@ function Context(ast,parentContext,type,name){
         parentContext.childContexts.push(this);
     }
     this.init();
+    this.processExternals();
 }
 
 Context.prototype.print = function(){
@@ -67,7 +66,23 @@ Context.prototype.print = function(){
 }
 
 Context.prototype.processExternals = function(){
+    var groupedByFirst = _.groupBy(this.expressions,function(expr){
+        var splitExpr = expr.split('.');
+        return splitExpr[0];
+    });
+    for (var i = 0; i < this.variables.length; i++) {
+        delete groupedByFirst[this.variables[i].name];
+    }
 
+    var externals = _(groupedByFirst)
+        .values()
+        .flatten()
+        .uniq();
+
+    console.log(this.name);
+    console.log(_.pluck(this.variables,'name'));
+    console.log(externals.value());
+    this.externals = externals.value();
 };
 
 
@@ -160,17 +175,10 @@ function storeExpression(context,expr){
         context.expressions.push(expr.name);
     }
     if(expr.type === "CallExpression"){
-        context.expressions.push(getCallee(expr.callee));
-    }
-    if(expr.type === "BinaryExpression"){
-        storeExpression(context,expr.left);
-        storeExpression(context,expr.right);
-    }
-    if(expr.type === "UpdateExpression"){
-        storeExpression(context,expr.argument);
-    }
-    if(expr.type === "SequenceExpression"){
-        processSequenceExpression(context,expr);
+        var callee = getCallee(expr.callee);
+        if(callee){
+            context.expressions.push(callee);
+        }
     }
 }
 

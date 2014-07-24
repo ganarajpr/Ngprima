@@ -1,8 +1,7 @@
 var fs = require('fs');
 //var cquery = require("./codequery/cquery");
 var selector = require("./codequery/selector");
-var escodegen = require('escodegen');
-
+var escodegen = require("escodegen");
 
 //var code = fs.readFileSync("./codequery/cquery.js");
 
@@ -13,15 +12,15 @@ var code = fs.readFileSync("test.js");
 function testCode(fileName,code) {
     //var cq = new cquery(code);
     var sel = selector.process(code);
-    //sel.context.print();
+    var ctx = sel.getFunctionByName('onAdd');
+    //console.log(ctx.expressions);
+    var vnames;
+    vnames = ctx.variables.map(function(v){
+        return v.name;
+    });
 
-
-    var ctx = sel.getContextByName("onAdd");
-    console.log(escodegen.generate(ctx.ast));
-    console.log(ctx.expressions);
-    console.log(sel.getExternals("onAdd"));
-
-    //sel.context.print();
+    //console.log(vnames);
+    //console.log(escodegen.generate(ctx.ast));
     //writeToFile(fileName,sel.context.ast);
 }
 

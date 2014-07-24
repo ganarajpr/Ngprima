@@ -36,9 +36,7 @@
                 };    
             }
 
-
             log();
-
             $scope.log();
             tre.abc.log().log();
             $scope.onAdd = function(){
