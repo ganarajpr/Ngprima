@@ -2,6 +2,8 @@
  * Created by ganara.jpermunda on 24/07/2014.
  */
 var _ = require("lodash");
+var create = require("./create");
+var escodegen = require("escodegen");
 
 function isFunction(str){
     "use strict";
@@ -90,15 +92,33 @@ function addReturnValue(parts,currentIndex){
     return str;
 }
 
-module.exports = {
+function convertExpression(expr){
+    var parts = expr.split('.');
+    var funcName;
+    if( isFunction( _.first(parts) ) ){
+        funcName = getFuncName(parts[0]);
+        prg.addVariable(funcName);
+    }
+    else{
+
+    }
+
+}
+
+var prg;
+
+    module.exports = {
     stub : function (expressions){
         var generated = ''
+
+        prg = new create.Program();
         for (var i = 0; i < expressions.length; i++) {
-            var expr = expressions[i];
+            /*var expr = expressions[i];
             var parts = expr.split('.');
-            generated += generate(parts);
+            generated += generate(parts);*/
+            convertExpression(expressions[i]);
         }
-        return generated;
+        return escodegen.generate(prg);
         //return JSON.stringify(parent);
     }
 };
