@@ -30,8 +30,11 @@ function testCode(fileName,code) {
     prg.addVariable('y');
 
     var idX = new create.Identifier('x');
-    var litA = new create.Literal('12');
-    prg.addAssignment(idX,litA);
+    var lit12 = new create.Literal('12');
+    var funcx = new create.FunctionExpression('b');
+    prg.addAssignment(idX,funcx);
+    funcx.addVariableArgument('y');
+    funcx.addVariable('n');
     console.log(escodegen.generate(prg));
 
 
