@@ -28,6 +28,10 @@ function testCode(fileName,code) {
     var prg = new create.Program();
     prg.addVariable('x');
     prg.addVariable('y');
+
+    var idX = new create.Identifier('x');
+    var litA = new create.Literal('12');
+    prg.addAssignment(idX,litA);
     console.log(escodegen.generate(prg));
 
 

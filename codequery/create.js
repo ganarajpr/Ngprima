@@ -27,6 +27,12 @@ Program.prototype.addVariable = function (variable) {
     vardecl.addVariable(variable);
 };
 
+Program.prototype.addAssignment = function(left,right){
+    var assign = new Assignment(left,right);
+    var expr = new ExpressionStatement(assign);
+    this.body.push(expr);
+};
+
 
 function VariableDeclaration(){
     "use strict";
@@ -54,7 +60,31 @@ function Identifier(name){
 }
 
 
+function Literal(name){
+    this.type = 'Literal';
+    this.value = name;
+    //this.raw = JSON.stringify(name);
+}
+
+
+function Assignment(left,right){
+    this.type = 'AssignmentExpression';
+    this.operator = '=';
+    this.left = left;
+    this.right = right;
+}
+
+function ExpressionStatement(expression){
+    this.type = 'ExpressionStatement';
+    this.expression = expression;
+}
+
+
 module.exports = {
     Program: Program,
-    VariableDeclaration: VariableDeclaration
+    VariableDeclaration: VariableDeclaration,
+    Assignment : Assignment,
+    Identifier : Identifier,
+    Literal : Literal
+
 };
