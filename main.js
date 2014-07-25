@@ -32,9 +32,18 @@ function testCode(fileName,code) {
     var idX = new create.Identifier('x');
     var lit12 = new create.Literal('12');
     var funcx = new create.FunctionExpression('b');
-    prg.addAssignment(idX,funcx);
-    funcx.addVariableArgument('y');
-    funcx.addVariable('n');
+    var funcaddNode = new create.FunctionExpression('addNode');
+
+    funcaddNode.addVariableArgument('y');
+    funcaddNode.addVariable('n');
+    var obj = new create.ObjectExpression();
+    obj.addProperty(new create.Identifier('a'),new create.ObjectExpression());
+    funcaddNode.addReturn(obj);
+
+    prg.addAssignment(idX,funcaddNode);
+
+
+
     console.log(escodegen.generate(prg));
 
 

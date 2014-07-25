@@ -125,8 +125,23 @@ FunctionExpression.prototype.addVariableArgument = function(name){
 
 function ReturnStatement(arg){
     this.type = 'ReturnStatement';
-    this.argument = null;
+    this.argument = arg;
 }
+
+function ObjectExpression(){
+    this.type = 'ObjectExpression';
+    this.properties = [];
+}
+
+ObjectExpression.prototype.addProperty = function(key,value){
+    var prop = {
+        type : 'Property',
+        key : key,
+        value : value,
+        kind : 'init'
+    };
+    this.properties.push(prop);
+};
 
 /*FunctionExpression.prototype.addLiteralArgument = function(val){
     this.params.push(new Literal(val));
@@ -139,6 +154,7 @@ module.exports = {
     Assignment : Assignment,
     Identifier : Identifier,
     Literal : Literal,
-    FunctionExpression : FunctionExpression
+    FunctionExpression : FunctionExpression,
+    ObjectExpression : ObjectExpression
 
 };
