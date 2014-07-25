@@ -13,11 +13,13 @@ var code = fs.readFileSync("test.js");
 
 function testCode(fileName,code) {
     //var cq = new cquery(code);
-    /*var sel = selector.process(code);
-    var ctx = sel.getFunctionByName('OverlayController');
+    var sel = selector.process(code);
+    var ctx = sel.getFunctionByName('onAdd');
     ctx.processExternals();
     console.log(ctx.externals);
-    console.log(stubber.stub(ctx.externals));*/
+
+    var st = stubber.stub(ctx.externals);
+    console.log(st);
 
     /*var vnames;
     vnames = ctx.variables.map(function(v){
@@ -25,7 +27,7 @@ function testCode(fileName,code) {
     });*/
 
 
-    var prg = new create.Program();
+    /*var prg = new create.Program();
     prg.addVariable('x');
     prg.addVariable('y');
 
@@ -45,7 +47,8 @@ function testCode(fileName,code) {
 
 
 
-    console.log(escodegen.generate(prg));
+    console.log(escodegen.generate(prg));*/
+
 
 
     //console.log(vnames);

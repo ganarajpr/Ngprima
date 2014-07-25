@@ -5,117 +5,131 @@ var _ = require("lodash");
 var create = require("./create");
 var escodegen = require("escodegen");
 
-function isFunction(str){
+function isFunction(str) {
     "use strict";
     var index = str.indexOf('()');
     return index !== -1 && index === str.length - 2;
 }
 
-function getFuncName(funcStr){
+function getFuncName(funcStr) {
     "use strict";
-    var length = funcStr.length -2;
-    return funcStr.substr(0,length)
+    var length = funcStr.length - 2;
+    return funcStr.substr(0, length)
 }
 
 
-function namespace(namespaceString,parent) {
-    var parts = namespaceString.split('.'),
-        currentPart = '';
-    var i = 0;
-    var toBeAppended = '';
-
-    while(i < parts.length){
-        currentPart = parts[i];
-        if(isFunction(currentPart)){
-
-            toBeAppended += 'function(){';
-            toBeAppended += addReturnValue(parts,i+1);
-            toBeAppended += '}';
-            parent[getFuncName(currentPart)] = toBeAppended;
-            break;
-        }
-        else{
-            parent[currentPart] = parent[currentPart] || {};
-            parent = parent[currentPart];
-        }
-        i++;
-    }
-    return parent;
-}
-
-
-function generate(parts){
-    "use strict";
-    var returnString = '';
-    if(parts.length > 1){
-        if(isFunction(_.first(parts))){
-            returnString += getFuncName(_.first(parts)) + ':function(){ return {' + generate(_.rest(parts)) + '}; }';
-        }
-        else{
-            returnString += _.first(parts) +': {'+ generate(_.rest(parts)) + '}';
-        }
-    }
-    else{
-        if(isFunction(_.first(parts))){
-            returnString += getFuncName(_.first(parts)) + ':function(){ return; ' + '}';
-        }
-        else{
-            returnString += _.first(parts) +': {'+ '}';
-        }
-    }
-    return returnString;
-}
-
-function addReturnValue(parts,currentIndex){
-    "use strict";
-    var str = '';
-    if(currentIndex < parts.length){
-        var currentPart = parts[currentIndex];
-        if(isFunction(currentPart)){
-            str += 'return {';
-            str += getFuncName(currentPart) + ': ';
-            str += 'function(){';
-            str += 'return '
-            str += addReturnValue(parts,currentIndex+1);
-            str += '}';
-            str += '}';
-        }
-        else{
-            str += 'return ';
-            str += '{';
-            str += currentPart;
-            str += ' : ';
-            str += addReturnValue(parts,currentIndex+1);
-            str += '};';
-        }
-    }
-    return str;
-}
-
-function convertExpression(expr){
-    var parts = expr.split('.');
-    var funcName;
-    if( isFunction( _.first(parts) ) ){
-        funcName = getFuncName(parts[0]);
-        prg.addVariable(funcName);
-    }
-    else{
-
-    }
-
-}
 
 var prg;
 
-    module.exports = {
-    stub : function (expressions){
-        var generated = ''
+
+function convertExpression(expr) {
+    var parts = expr.split('.');
+    var identifier;
+    var first = _.first(parts);
+    if (isFunction(first)) {
+        identifier = getFuncName(first);
+        prg.addVariable(identifier);
+        if(parts.length > 1){
+            prg.addAssignment(new create.Identifier(identifier),new create.FunctionExpression());
+        }
+        else{
+            var funct = new create.FunctionExpression();
+            funct.addReturn(new create.Literal(1));
+            prg.addAssignment(new create.Identifier(identifier),funct);
+        }
+
+    }
+    else {
+        prg.addVariable(first);
+        if(parts.length > 1){
+            var obj = new create.ObjectExpression();
+            prg.addAssignment(new create.Identifier(first),obj);
+            addToObject(obj, _.rest(parts));
+        }
+        else{
+            prg.addAssignment(new create.Identifier(first),new create.Literal(1));
+        }
+    }
+}
+
+function addToObject(obj,parts){
+    "use strict";
+    var first = _.first(parts);
+    var identifier;
+    if (isFunction(first)) {
+        identifier = getFuncName(first);
+        if(parts.length > 1){
+            obj.addProperty(new create.Identifier(identifier),getFunction(_.rest(parts)));
+        }
+        else{
+            var funct = new create.FunctionExpression();
+            funct.addReturn(new create.Literal(1));
+            obj.addProperty(new create.Identifier(identifier),funct);
+        }
+    }
+    else {
+        if(parts.length > 1){
+            var newObj = new create.ObjectExpression();
+            obj.addProperty(new create.Identifier(first),newObj);
+            addToObject(newObj,_.rest(parts))
+        }
+        else{
+            obj.addProperty(new create.Identifier(first),new create.Literal(1));
+        }
+    }
+}
+
+function getFunctionOrObject(parts){
+    "use strict";
+    var first = _.first(parts);
+    if(isFunction(first)){
+        return getFunction(parts);
+    }
+    var obj = new create.ObjectExpression();
+    addToObject(obj,parts);
+    return obj;
+}
+
+function getFunction(parts){
+    "use strict";
+    var funcx = new create.FunctionExpression();
+    var first = _.first(parts);
+    var identifier;
+    if (isFunction(first)) {
+        identifier = getFuncName(first);
+        if(parts.length > 1){
+            var newObj = new create.ObjectExpression();
+            newObj.addProperty(new create.Identifier(identifier),getFunction(_.rest(parts)));
+            funcx.addReturn( newObj );
+        }
+        else{
+            var newObj = new create.ObjectExpression();
+            var anofunc = new create.FunctionExpression();
+            anofunc.addReturn(new create.Literal(1));
+            newObj.addProperty(new create.Identifier(identifier),anofunc);
+            funcx.addReturn( newObj );
+        }
+    }
+    else {
+        if(parts.length > 1){
+            var newObj = new create.ObjectExpression();
+            obj.addProperty(new create.Identifier(first),addToObject(newObj,_.rest(parts)));
+        }
+        else{
+            obj.addProperty(new create.Identifier(first),new create.Literal(1));
+        }
+    }
+    return funcx;
+}
+
+module.exports = {
+    stub: function (expressions) {
 
         prg = new create.Program();
         for (var i = 0; i < expressions.length; i++) {
             /*var expr = expressions[i];
-            var parts = expr.split('.');
-            generated += generate(parts);*/
+             var parts = expr.split('.');
+             generated += generate(parts);*/
             convertExpression(expressions[i]);
         }
         return escodegen.generate(prg);
