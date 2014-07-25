@@ -143,6 +143,16 @@ ObjectExpression.prototype.addProperty = function(key,value){
     this.properties.push(prop);
 };
 
+
+function ArrayExpression(){
+    this.type = 'ArrayExpression';
+    this.elements = [];
+}
+
+ArrayExpression.prototype.addItem = function(item){
+    this.elements.push(item);
+};
+
 /*FunctionExpression.prototype.addLiteralArgument = function(val){
     this.params.push(new Literal(val));
 };*/
@@ -155,6 +165,7 @@ module.exports = {
     Identifier : Identifier,
     Literal : Literal,
     FunctionExpression : FunctionExpression,
-    ObjectExpression : ObjectExpression
+    ObjectExpression : ObjectExpression,
+    ArrayExpression : ArrayExpression
 
 };

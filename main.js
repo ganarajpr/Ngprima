@@ -36,8 +36,9 @@ function testCode(fileName,code) {
 
     funcaddNode.addVariableArgument('y');
     funcaddNode.addVariable('n');
-    var obj = new create.ObjectExpression();
-    obj.addProperty(new create.Identifier('a'),new create.ObjectExpression());
+    var obj = new create.ArrayExpression();
+    obj.addItem(new create.Identifier('a'));
+    //obj.addProperty(new create.Identifier('a'),new create.ObjectExpression());
     funcaddNode.addReturn(obj);
 
     prg.addAssignment(idX,funcaddNode);
