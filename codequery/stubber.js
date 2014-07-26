@@ -21,30 +21,52 @@ function getFuncName(funcStr) {
 
 var prg;
 
+function handleFirstFunction(parts){
+    "use strict";
+    var identifier;
+    var first = _.first(parts);
+    identifier = getFuncName(first);
+    prg.addVariable(identifier);
+    if(parts.length > 1){
+        var idassign = prg.getAssignment(identifier);
+        if(!idassign){
+            var newfe = new create.FunctionExpression();
+            prg.addAssignment(new create.Identifier(identifier),newfe);
+        }
+        else{
+            if(idassign.right.type === "FunctionExpression"){
+                //use the already existing function expression.
+            }
+        }
+
+    }
+    else{
+        var funct = new create.FunctionExpression();
+        funct.addReturn(new create.Literal(1));
+        prg.addAssignment(new create.Identifier(identifier),funct);
+    }
+}
+
 
 function convertExpression(expr) {
     var parts = expr.split('.');
-    var identifier;
+
     var first = _.first(parts);
     if (isFunction(first)) {
-        identifier = getFuncName(first);
-        prg.addVariable(identifier);
-        if(parts.length > 1){
-            prg.addAssignment(new create.Identifier(identifier),new create.FunctionExpression());
-        }
-        else{
-            var funct = new create.FunctionExpression();
-            funct.addReturn(new create.Literal(1));
-            prg.addAssignment(new create.Identifier(identifier),funct);
-        }
-
+        handleFirstFunction(parts);
     }
     else {
         prg.addVariable(first);
         if(parts.length > 1){
-            var obj = new create.ObjectExpression();
-            prg.addAssignment(new create.Identifier(first),obj);
-            addToObject(obj, _.rest(parts));
+            var idassign = prg.getAssignment(first);
+            if(!idassign){
+                var obj = new create.ObjectExpression();
+                prg.addAssignment(new create.Identifier(first),obj);
+                addToObject(obj, _.rest(parts));
+            }
+            else{
+                addToObject(idassign.right, _.rest(parts));
+            }
         }
         else{
             prg.addAssignment(new create.Identifier(first),new create.Literal(1));

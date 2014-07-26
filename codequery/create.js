@@ -32,6 +32,18 @@ Program.prototype.addVariable = function (variable) {
     addVariable(this.body,variable);
 };
 
+Program.prototype.getAssignment = function(ident){
+    "use strict";
+    for (var i = 0; i < this.body.length; i++) {
+        if(this.body[i].type === "ExpressionStatement" && this.body[i].expression.type === "AssignmentExpression"){
+            var expr = this.body[i].expression;
+            if(expr.left.type === 'Identifier' && expr.left.name === ident){
+                return expr;
+            }
+        }
+    }
+}
+
 Program.prototype.addAssignment = function(left,right){
     var assign = new Assignment(left,right);
     var expr = new ExpressionStatement(assign);
