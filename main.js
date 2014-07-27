@@ -18,7 +18,7 @@ function testCode(fileName,code) {
     ctx.processExternals();
     console.log(ctx.externals);
 
-    var st = stubber.stub(ctx.externals);
+    var st = stubber.stub(ctx);
     console.log(st);
 
     /*var vnames;

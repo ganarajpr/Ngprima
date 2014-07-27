@@ -84,7 +84,7 @@ function getCoreObject() {
 function handleThis(parts) {
     var co = getCoreObject();
     if(!co){
-        prg.addVariable(coreobject)
+        prg.addVariable(coreobject);
         var core = new create.ObjectExpression();
         addToObject(core, _.rest(parts));
         prg.addAssignment(new create.Identifier(coreobject),core);
@@ -93,6 +93,22 @@ function handleThis(parts) {
         addToObject(co.right, _.rest(parts));
     }
 
+}
+
+
+function addMainFunction(ctx){
+    "use strict";
+    var co = getCoreObject();
+    if(!co){
+        prg.addVariable(coreobject);
+        var core = new create.ObjectExpression();
+
+        prg.addAssignment(new create.Identifier(coreobject),core);
+        core.addProperty(new create.Identifier(ctx.name), ctx.ast);
+    }
+    else{
+        co.right.addProperty(new create.Identifier(ctx.name), ctx.ast);
+    }
 }
 function convertExpression(expr) {
     var parts = expr.split('.');
@@ -250,8 +266,8 @@ function addToFunction(funcx,parts){
 }
 
 module.exports = {
-    stub: function (expressions) {
-
+    stub: function (ctx) {
+        var expressions = ctx.externals;
         prg = new create.Program();
         for (var i = 0; i < expressions.length; i++) {
             /*var expr = expressions[i];
@@ -259,6 +275,7 @@ module.exports = {
              generated += generate(parts);*/
             convertExpression(expressions[i]);
         }
+        addMainFunction(ctx);
         //console.log(JSON.stringify(prg));
         return escodegen.generate(prg);
         //return JSON.stringify(parent);
