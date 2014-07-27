@@ -14,7 +14,7 @@ var code = fs.readFileSync("test.js");
 function testCode(fileName,code) {
     //var cq = new cquery(code);
     var sel = selector.process(code);
-    var ctx = sel.getFunctionByName('OverlayController');
+    var ctx = sel.getFunctionByName('onAdd');
     ctx.processExternals();
     console.log(ctx.externals);
 

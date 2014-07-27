@@ -41,14 +41,15 @@
             tre.abc.log().log().a();
             $scope.onAdd = function(){
                 var node = NodeService.addNode($scope.state.selectedOption);
-                node.abc = "bbc";
                 console.log(node.abc);
+                node.abc = console.log().a;
                 node.properties;
                 $scope.a;
                 a;
                 b().a;
                 do {
                     this.terminate = true;
+                    this.matter();
                 }
                 while(i<are);
                 $scope.state.selectedOption = "";

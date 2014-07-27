@@ -5,6 +5,8 @@ var _ = require("lodash");
 var create = require("./create");
 var escodegen = require("escodegen");
 
+var coreobject = "$_coreobject_$";
+
 function isFunction(str) {
     "use strict";
     var index = str.indexOf('()');
@@ -47,35 +49,61 @@ function handleFirstFunction(parts){
     }
 }
 
+function handleFirstObject(parts){
+    "use strict";
+    var first = _.first(parts);
+    prg.addVariable(first);
+    var idassign = prg.getAssignment(first);
+    if(parts.length > 1){
+        //check if something is already assigned to that variable name.
+        if(!idassign){
+            //if not create the assignment
+            var obj = new create.ObjectExpression();
 
+            prg.addAssignment(new create.Identifier(first),obj);
+            //add the rest of to the created object.
+            addToObject(obj, _.rest(parts));
+        }
+        else{
+            //if assignment already exists add to
+            addToObject(idassign.right, _.rest(parts));
+        }
+    }
+    else{
+        //overwrites the existing... this should not happen!
+        console.log("overwriting the existing assignment!!!!!! WARNING");
+        prg.addAssignment(new create.Identifier(first),new create.Literal(1));
+    }
+}
+
+
+function getCoreObject() {
+    return prg.getAssignment(coreobject);
+}
+function handleThis(parts) {
+    var co = getCoreObject();
+    if(!co){
+        prg.addVariable(coreobject)
+        var core = new create.ObjectExpression();
+        addToObject(core, _.rest(parts));
+        prg.addAssignment(new create.Identifier(coreobject),core);
+    }
+    else{
+        addToObject(co.right, _.rest(parts));
+    }
+
+}
 function convertExpression(expr) {
     var parts = expr.split('.');
-
     var first = _.first(parts);
     if (isFunction(first)) {
         handleFirstFunction(parts);
     }
-    else {
-        if(first === 'this'){
-
-        }
-        else{
-            prg.addVariable(first);
-            if(parts.length > 1){
-                var idassign = prg.getAssignment(first);
-                if(!idassign){
-                    var obj = new create.ObjectExpression();
-                    prg.addAssignment(new create.Identifier(first),obj);
-                    addToObject(obj, _.rest(parts));
-                }
-                else{
-                    addToObject(idassign.right, _.rest(parts));
-                }
-            }
-            else{
-                prg.addAssignment(new create.Identifier(first),new create.Literal(1));
-            }
-        }
+    else if(first === 'this'){
+            handleThis(parts);
+    }
+    else{
+        handleFirstObject(parts);
     }
 }
 
@@ -86,7 +114,14 @@ function addToObject(obj,parts){
     if (isFunction(first)) {
         identifier = getFuncName(first);
         if(parts.length > 1){
-            obj.addProperty(new create.Identifier(identifier),getFunction(_.rest(parts)));
+            var currentProp = obj.getProperty(identifier);
+            if(!currentProp){
+                var funcx = new create.FunctionExpression();
+                obj.addProperty(new create.Identifier(identifier),addToFunction(funcx,_.rest(parts)));
+            }
+            else{
+                addToFunction(currentProp,_.rest(parts));
+            }
         }
         else{
             var funct = new create.FunctionExpression();
@@ -96,12 +131,23 @@ function addToObject(obj,parts){
     }
     else {
         if(parts.length > 1){
-            var newObj = new create.ObjectExpression();
-            obj.addProperty(new create.Identifier(first),newObj);
-            addToObject(newObj,_.rest(parts))
+            var currentProp = obj.getProperty(first);
+            if(!currentProp){
+                var newObj = new create.ObjectExpression();
+                obj.addProperty(new create.Identifier(first),newObj);
+                addToObject(newObj,_.rest(parts))
+            }
+            else{
+                addToObject(currentProp, _.rest(parts));
+            }
+
         }
         else{
-            obj.addProperty(new create.Identifier(first),new create.Literal(1));
+            var currentProp = obj.getProperty(first);
+            if(!currentProp){
+                var newObj = new create.ObjectExpression();
+                obj.addProperty(new create.Identifier(first),new create.Literal(1));
+            }
         }
     }
 }
@@ -117,33 +163,49 @@ function getFunctionOrObject(parts){
     return obj;
 }
 
-function getFunction(parts){
+function addToFunction(funcx,parts){
     "use strict";
-    var funcx = new create.FunctionExpression();
     var first = _.first(parts);
+    var retVal = funcx.getReturnValue();
     var identifier;
     if (isFunction(first)) {
         identifier = getFuncName(first);
         if(parts.length > 1){
-            var newObj = new create.ObjectExpression();
-            newObj.addProperty(new create.Identifier(identifier),getFunction(_.rest(parts)));
-            funcx.addReturn( newObj );
+            if(retVal && retVal.type === "ObjectExpression" ){
+                var newFunc = new create.FunctionExpression();
+                retVal.addProperty(new create.Identifier(identifier),addToFunction(newFunc,_.rest(parts)));
+            }
+            else{
+                var newObj = new create.ObjectExpression();
+                var newFunc = new create.FunctionExpression();
+                newObj.addProperty(new create.Identifier(identifier),addToFunction(newFunc,_.rest(parts)));
+                funcx.addReturn( newObj );
+            }
+
         }
         else{
-            var newObj = new create.ObjectExpression();
-            var anofunc = new create.FunctionExpression();
-            anofunc.addReturn(new create.Literal(1));
-            newObj.addProperty(new create.Identifier(identifier),anofunc);
-            funcx.addReturn( newObj );
+                var newObj = new create.ObjectExpression();
+                var anofunc = new create.FunctionExpression();
+                anofunc.addReturn(new create.Literal(1));
+                newObj.addProperty(new create.Identifier(identifier),anofunc);
+                funcx.addReturn( newObj );
         }
     }
     else {
         if(parts.length > 1){
-            var newObj = new create.ObjectExpression();
-            obj.addProperty(new create.Identifier(first),addToObject(newObj,_.rest(parts)));
+            if(retVal && retVal.type === "ObjectExpression" ){
+                retVal.addProperty(new create.Identifier(first),addToObject(newObj,_.rest(parts)));
+            }
+            else{
+                var newObj = new create.ObjectExpression();
+                newObj.addProperty(new create.Identifier(first),addToObject(newObj,_.rest(parts)));
+                funcx.addReturn( newObj );
+            }
         }
         else{
-            obj.addProperty(new create.Identifier(first),new create.Literal(1));
+            var newObj = new create.ObjectExpression();
+            newObj.addProperty(new create.Identifier(first),new create.Literal(1));
+            funcx.addReturn( newObj );
         }
     }
     return funcx;

@@ -144,6 +144,16 @@ FunctionExpression.prototype.addVariableArgument = function(name){
     this.params.push(new Identifier(name));
 };
 
+FunctionExpression.prototype.getReturnValue = function(){
+    "use strict";
+    for (var i = 0; i < this.body.body.length;i++) {
+        if(this.body.body[i].type === "ReturnStatement"){
+            return this.body.body[i].argument;
+        }
+    }
+};
+
+
 
 function ReturnStatement(arg){
     this.type = 'ReturnStatement';
@@ -164,6 +174,15 @@ ObjectExpression.prototype.addProperty = function(key,value){
     };
     this.properties.push(prop);
 };
+
+ObjectExpression.prototype.getProperty = function(key){
+    for (var i = 0; i < this.properties.length; i++) {
+        if(this.properties[i].key.name === key){
+            return this.properties[i].value;
+        }
+    }
+};
+
 
 
 function ArrayExpression(){
