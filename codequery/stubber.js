@@ -34,6 +34,7 @@ function handleFirstFunction(parts){
         if(!idassign){
             var newfe = new create.FunctionExpression();
             prg.addAssignment(new create.Identifier(identifier),newfe);
+            addToFunction(newfe, _.rest(parts));
         }
         else{
             if(idassign.right.type === "FunctionExpression"){
@@ -212,8 +213,15 @@ function addToFunction(funcx,parts){
             }
         }
         else{
-            if(retVal && ( retVal.type === "ObjectExpression" || retVal.type === "Literal" )  ){
-                retVal.addProperty(new create.Identifier(first),new create.Literal(1));
+            if(retVal){
+                if(retVal.argument.type === "ObjectExpression"){
+                    retVal.argument.addProperty(new create.Identifier(first),new create.Literal(1));
+                }
+                else if(retVal.argument.type === "Literal"){
+                    newObj = new create.ObjectExpression();
+                    newObj.addProperty(new create.Identifier(first),new create.Literal(1));
+                    retVal.argument = newObj;
+                }
             }
             else{
                 newObj = new create.ObjectExpression();
