@@ -177,10 +177,16 @@ function addToFunction(funcx,parts){
     if (isFunction(first)) {
         identifier = getFuncName(first);
         if(parts.length > 1){
-            if(retVal ){
-                if(retVal.type === "ObjectExpression"){
+            if(retVal){
+                if(retVal.argument.type === "ObjectExpression"){
                     var newFunc = new create.FunctionExpression();
                     retVal.addProperty(new create.Identifier(identifier),addToFunction(newFunc,_.rest(parts)));
+                }
+                else if(retVal.argument.type === "Literal"){
+                    newObj = new create.ObjectExpression();
+                    newFunc = new create.FunctionExpression();
+                    newObj.addProperty(new create.Identifier(identifier),addToFunction(newFunc,_.rest(parts)));
+                    retVal.argument = newObj;
                 }
             }
             else{
@@ -189,7 +195,6 @@ function addToFunction(funcx,parts){
                 newObj.addProperty(new create.Identifier(identifier),addToFunction(newFunc,_.rest(parts)));
                 funcx.addReturn( newObj );
             }
-
         }
         else{
                 newObj = new create.ObjectExpression();
@@ -201,14 +206,25 @@ function addToFunction(funcx,parts){
     }
     else {
         if(parts.length > 1){
-            if(retVal && retVal.type !== "Literal" ){
-                if(retVal.type === "ObjectExpression"){
-                    retVal.addProperty(new create.Identifier(first),addToObject(newObj,_.rest(parts)));
+            if(retVal){
+                if(retVal.argument.type === "ObjectExpression"){
+                    var anoObject = new create.ObjectExpression();
+                    retVal.addProperty(new create.Identifier(first),anoObject);
+                    addToObject(anoObject, _.rest(parts));
+                }
+                else if(retVal.argument.type === "Literal"){
+                    var anoObject = new create.ObjectExpression();
+                    newObj = new create.ObjectExpression();
+                    newObj.addProperty(new create.Identifier(first),anoObject);
+                    addToObject(anoObject, _.rest(parts));
+                    retVal.argument = newObj;
                 }
             }
             else{
                 newObj = new create.ObjectExpression();
-                newObj.addProperty(new create.Identifier(first),addToObject(newObj,_.rest(parts)));
+                var anoObject = new create.ObjectExpression();
+                newObj.addProperty(new create.Identifier(first),anoObject);
+                addToObject(anoObject, _.rest(parts));
                 funcx.addReturn( newObj );
             }
         }
@@ -243,6 +259,7 @@ module.exports = {
              generated += generate(parts);*/
             convertExpression(expressions[i]);
         }
+        //console.log(JSON.stringify(prg));
         return escodegen.generate(prg);
         //return JSON.stringify(parent);
     }

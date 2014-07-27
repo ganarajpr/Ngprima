@@ -43,6 +43,12 @@
                 var node = NodeService.addNode($scope.state.selectedOption);
                 console.log(node.abc);
                 node.abc = console.log().a;
+
+                switch ( man().c.a() ){
+                    default :
+                        hello();
+                    break;
+                }
                 node.properties;
                 $scope.a;
                 a;

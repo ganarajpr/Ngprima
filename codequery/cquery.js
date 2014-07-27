@@ -194,6 +194,7 @@ function processIfStatement(context,expr){
 
 
 function processSwitchStatement(context,expr){
+    processExpressionStatement(context,expr.discriminant);
     context.SwitchStatements.push(expr);
     if(expr.cases && expr.cases.length){
         expr.cases.forEach(function(eachCase){
