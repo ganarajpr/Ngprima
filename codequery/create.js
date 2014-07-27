@@ -148,7 +148,7 @@ FunctionExpression.prototype.getReturnValue = function(){
     "use strict";
     for (var i = 0; i < this.body.body.length;i++) {
         if(this.body.body[i].type === "ReturnStatement"){
-            return this.body.body[i].argument;
+            return this.body.body[i];
         }
     }
 };

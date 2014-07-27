@@ -38,6 +38,7 @@ function handleFirstFunction(parts){
         else{
             if(idassign.right.type === "FunctionExpression"){
                 //use the already existing function expression.
+                addToFunction(idassign.right, _.rest(parts));
             }
         }
 
@@ -59,7 +60,6 @@ function handleFirstObject(parts){
         if(!idassign){
             //if not create the assignment
             var obj = new create.ObjectExpression();
-
             prg.addAssignment(new create.Identifier(first),obj);
             //add the rest of to the created object.
             addToObject(obj, _.rest(parts));
@@ -108,15 +108,20 @@ function convertExpression(expr) {
 }
 
 function addToObject(obj,parts){
+
     "use strict";
-    var first = _.first(parts);
+
+    var first = _.first( parts );
     var identifier;
-    if (isFunction(first)) {
+    var newObj,funcx;
+    var currentProp;
+
+    if ( isFunction(first) ) {
         identifier = getFuncName(first);
         if(parts.length > 1){
-            var currentProp = obj.getProperty(identifier);
+            currentProp = obj.getProperty(identifier);
             if(!currentProp){
-                var funcx = new create.FunctionExpression();
+                funcx = new create.FunctionExpression();
                 obj.addProperty(new create.Identifier(identifier),addToFunction(funcx,_.rest(parts)));
             }
             else{
@@ -124,28 +129,27 @@ function addToObject(obj,parts){
             }
         }
         else{
-            var funct = new create.FunctionExpression();
-            funct.addReturn(new create.Literal(1));
-            obj.addProperty(new create.Identifier(identifier),funct);
+            funcx = new create.FunctionExpression();
+            funcx.addReturn(new create.Literal(1));
+            obj.addProperty(new create.Identifier(identifier),funcx);
         }
     }
     else {
-        if(parts.length > 1){
-            var currentProp = obj.getProperty(first);
+        if( parts.length > 1 ){
+            currentProp = obj.getProperty(first);
             if(!currentProp){
-                var newObj = new create.ObjectExpression();
+                newObj = new create.ObjectExpression();
                 obj.addProperty(new create.Identifier(first),newObj);
                 addToObject(newObj,_.rest(parts))
             }
             else{
                 addToObject(currentProp, _.rest(parts));
             }
-
         }
-        else{
-            var currentProp = obj.getProperty(first);
+        else {
+            currentProp = obj.getProperty(first);
             if(!currentProp){
-                var newObj = new create.ObjectExpression();
+                newObj = new create.ObjectExpression();
                 obj.addProperty(new create.Identifier(first),new create.Literal(1));
             }
         }
@@ -168,44 +172,54 @@ function addToFunction(funcx,parts){
     var first = _.first(parts);
     var retVal = funcx.getReturnValue();
     var identifier;
+    var newObj;
     if (isFunction(first)) {
         identifier = getFuncName(first);
         if(parts.length > 1){
-            if(retVal && retVal.type === "ObjectExpression" ){
-                var newFunc = new create.FunctionExpression();
-                retVal.addProperty(new create.Identifier(identifier),addToFunction(newFunc,_.rest(parts)));
+            if(retVal ){
+                if(retVal.type === "ObjectExpression"){
+                    var newFunc = new create.FunctionExpression();
+                    retVal.addProperty(new create.Identifier(identifier),addToFunction(newFunc,_.rest(parts)));
+                }
             }
             else{
-                var newObj = new create.ObjectExpression();
-                var newFunc = new create.FunctionExpression();
+                newObj = new create.ObjectExpression();
+                newFunc = new create.FunctionExpression();
                 newObj.addProperty(new create.Identifier(identifier),addToFunction(newFunc,_.rest(parts)));
                 funcx.addReturn( newObj );
             }
 
         }
         else{
-                var newObj = new create.ObjectExpression();
-                var anofunc = new create.FunctionExpression();
-                anofunc.addReturn(new create.Literal(1));
-                newObj.addProperty(new create.Identifier(identifier),anofunc);
+                newObj = new create.ObjectExpression();
+                newFunc = new create.FunctionExpression();
+                newFunc.addReturn(new create.Literal(1));
+                newObj.addProperty(new create.Identifier(identifier),newFunc);
                 funcx.addReturn( newObj );
         }
     }
     else {
         if(parts.length > 1){
-            if(retVal && retVal.type === "ObjectExpression" ){
-                retVal.addProperty(new create.Identifier(first),addToObject(newObj,_.rest(parts)));
+            if(retVal && retVal.type !== "Literal" ){
+                if(retVal.type === "ObjectExpression"){
+                    retVal.addProperty(new create.Identifier(first),addToObject(newObj,_.rest(parts)));
+                }
             }
             else{
-                var newObj = new create.ObjectExpression();
+                newObj = new create.ObjectExpression();
                 newObj.addProperty(new create.Identifier(first),addToObject(newObj,_.rest(parts)));
                 funcx.addReturn( newObj );
             }
         }
         else{
-            var newObj = new create.ObjectExpression();
-            newObj.addProperty(new create.Identifier(first),new create.Literal(1));
-            funcx.addReturn( newObj );
+            if(retVal && ( retVal.type === "ObjectExpression" || retVal.type === "Literal" )  ){
+                retVal.addProperty(new create.Identifier(first),new create.Literal(1));
+            }
+            else{
+                newObj = new create.ObjectExpression();
+                newObj.addProperty(new create.Identifier(first),new create.Literal(1));
+                funcx.addReturn( newObj );
+            }
         }
     }
     return funcx;
