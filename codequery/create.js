@@ -16,6 +16,7 @@ function Program() {
 
 
 function addVariable(body,variable){
+
     var index = _.findIndex(body,function(exp){
         "use strict";
         return exp instanceof VariableDeclaration;
@@ -60,7 +61,16 @@ function VariableDeclaration(){
 
 VariableDeclaration.prototype.addVariable = function(name){
     "use strict";
-    this.declarations.push(new VariableDeclarator(name));
+    var found = false;
+    for (var i = 0; i < this.declarations.length;i++) {
+        if(this.declarations[i].id.name === name){
+            found = true;
+            break;
+        }
+    }
+    if(!found){
+        this.declarations.push(new VariableDeclarator(name));
+    }
 };
 
 function VariableDeclarator(name){

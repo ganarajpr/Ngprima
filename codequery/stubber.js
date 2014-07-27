@@ -56,20 +56,25 @@ function convertExpression(expr) {
         handleFirstFunction(parts);
     }
     else {
-        prg.addVariable(first);
-        if(parts.length > 1){
-            var idassign = prg.getAssignment(first);
-            if(!idassign){
-                var obj = new create.ObjectExpression();
-                prg.addAssignment(new create.Identifier(first),obj);
-                addToObject(obj, _.rest(parts));
-            }
-            else{
-                addToObject(idassign.right, _.rest(parts));
-            }
+        if(first === 'this'){
+
         }
         else{
-            prg.addAssignment(new create.Identifier(first),new create.Literal(1));
+            prg.addVariable(first);
+            if(parts.length > 1){
+                var idassign = prg.getAssignment(first);
+                if(!idassign){
+                    var obj = new create.ObjectExpression();
+                    prg.addAssignment(new create.Identifier(first),obj);
+                    addToObject(obj, _.rest(parts));
+                }
+                else{
+                    addToObject(idassign.right, _.rest(parts));
+                }
+            }
+            else{
+                prg.addAssignment(new create.Identifier(first),new create.Literal(1));
+            }
         }
     }
 }
