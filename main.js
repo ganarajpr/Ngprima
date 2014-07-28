@@ -19,6 +19,7 @@ function testCode(fileName,code) {
     console.log(ctx.externals);
 
     var st = stubber.stub(ctx);
+    writeToFile('generated.js',st);
     console.log(st);
 
     /*var vnames;
@@ -59,7 +60,7 @@ function testCode(fileName,code) {
 
 function writeToFile(outputFilename,data){
     
-    fs.writeFile(outputFilename, JSON.stringify(data, null, 4), function writeFileCallBack(err) {
+    fs.writeFile(outputFilename, data, function writeFileCallBack(err) {
         if(err) {
           console.log(err);
         } else {
