@@ -169,7 +169,7 @@ function storeExpression(context,expr){
     if(expr.type === "Identifier"){
         context.expressions.push(expr.name);
     }
-    if(expr.type === "CallExpression"){
+    if(expr.type === "CallExpression" || expr.type === "NewExpression"){
         var callee = getCallee(expr.callee);
         if(callee){
             context.expressions.push(callee);
@@ -256,7 +256,7 @@ function processConditionalExpression(context, expression) {
     processExpressionStatement(context,expression.alternate);
 }
 function processNewExpression(context, expression) {
-    processExpressionStatement(context,expression.callee);
+    processFunctionCall(context,expression);
     expression.arguments.forEach(function(arg){
         processExpressionStatement(context,arg);
     });
