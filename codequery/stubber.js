@@ -98,16 +98,20 @@ function handleThis(parts) {
 
 function addMainFunction(ctx){
     "use strict";
+    var astCopy = _.clone(ctx.ast);
+    if(astCopy.type === 'FunctionDeclaration'){
+        astCopy.type = 'FunctionExpression';
+    }
     var co = getCoreObject();
     if(!co){
         prg.addVariable(coreobject);
         var core = new create.ObjectExpression();
 
         prg.addAssignment(new create.Identifier(coreobject),core);
-        core.addProperty(new create.Identifier(ctx.name), ctx.ast);
+        core.addProperty(new create.Identifier(ctx.name), astCopy);
     }
     else{
-        co.right.addProperty(new create.Identifier(ctx.name), ctx.ast);
+        co.right.addProperty(new create.Identifier(ctx.name), astCopy);
     }
 }
 function convertExpression(expr) {

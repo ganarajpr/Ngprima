@@ -6,7 +6,7 @@
                 "type": "VariableDeclarator",
                 "id": {
                     "type": "Identifier",
-                    "name": "NodeService"
+                    "name": "_"
                 },
                 "init": null
             },
@@ -14,7 +14,7 @@
                 "type": "VariableDeclarator",
                 "id": {
                     "type": "Identifier",
-                    "name": "$scope"
+                    "name": "getFuncName"
                 },
                 "init": null
             },
@@ -22,7 +22,7 @@
                 "type": "VariableDeclarator",
                 "id": {
                     "type": "Identifier",
-                    "name": "console"
+                    "name": "prg"
                 },
                 "init": null
             },
@@ -30,7 +30,7 @@
                 "type": "VariableDeclarator",
                 "id": {
                     "type": "Identifier",
-                    "name": "man"
+                    "name": "create"
                 },
                 "init": null
             },
@@ -38,23 +38,7 @@
                 "type": "VariableDeclarator",
                 "id": {
                     "type": "Identifier",
-                    "name": "hello"
-                },
-                "init": null
-            },
-            {
-                "type": "VariableDeclarator",
-                "id": {
-                    "type": "Identifier",
-                    "name": "a"
-                },
-                "init": null
-            },
-            {
-                "type": "VariableDeclarator",
-                "id": {
-                    "type": "Identifier",
-                    "name": "b"
+                    "name": "addToFunction"
                 },
                 "init": null
             },
@@ -76,7 +60,7 @@
             "operator": "=",
             "left": {
                 "type": "Identifier",
-                "name": "NodeService"
+                "name": "_"
             },
             "right": {
                 "type": "ObjectExpression",
@@ -85,7 +69,36 @@
                         "type": "Property",
                         "key": {
                             "type": "Identifier",
-                            "name": "addNode"
+                            "name": "first"
+                        },
+                        "value": {
+                            "type": "FunctionExpression",
+                            "id": null,
+                            "params": [],
+                            "defaults": [],
+                            "body": {
+                                "type": "BlockStatement",
+                                "body": [
+                                    {
+                                        "type": "ReturnStatement",
+                                        "argument": {
+                                            "type": "Literal",
+                                            "value": 1
+                                        }
+                                    }
+                                ]
+                            },
+                            "rest": null,
+                            "generator": false,
+                            "expression": false
+                        },
+                        "kind": "init"
+                    },
+                    {
+                        "type": "Property",
+                        "key": {
+                            "type": "Identifier",
+                            "name": "rest"
                         },
                         "value": {
                             "type": "FunctionExpression",
@@ -121,188 +134,7 @@
             "operator": "=",
             "left": {
                 "type": "Identifier",
-                "name": "$scope"
-            },
-            "right": {
-                "type": "ObjectExpression",
-                "properties": [
-                    {
-                        "type": "Property",
-                        "key": {
-                            "type": "Identifier",
-                            "name": "state"
-                        },
-                        "value": {
-                            "type": "ObjectExpression",
-                            "properties": [
-                                {
-                                    "type": "Property",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "selectedOption"
-                                    },
-                                    "value": {
-                                        "type": "Literal",
-                                        "value": 1
-                                    },
-                                    "kind": "init"
-                                }
-                            ]
-                        },
-                        "kind": "init"
-                    },
-                    {
-                        "type": "Property",
-                        "key": {
-                            "type": "Identifier",
-                            "name": "a"
-                        },
-                        "value": {
-                            "type": "Literal",
-                            "value": 1
-                        },
-                        "kind": "init"
-                    }
-                ]
-            }
-        }
-    },
-    {
-        "type": "ExpressionStatement",
-        "expression": {
-            "type": "AssignmentExpression",
-            "operator": "=",
-            "left": {
-                "type": "Identifier",
-                "name": "console"
-            },
-            "right": {
-                "type": "ObjectExpression",
-                "properties": [
-                    {
-                        "type": "Property",
-                        "key": {
-                            "type": "Identifier",
-                            "name": "log"
-                        },
-                        "value": {
-                            "type": "FunctionExpression",
-                            "id": null,
-                            "params": [],
-                            "defaults": [],
-                            "body": {
-                                "type": "BlockStatement",
-                                "body": [
-                                    {
-                                        "type": "ReturnStatement",
-                                        "argument": {
-                                            "type": "ObjectExpression",
-                                            "properties": [
-                                                {
-                                                    "type": "Property",
-                                                    "key": {
-                                                        "type": "Identifier",
-                                                        "name": "a"
-                                                    },
-                                                    "value": {
-                                                        "type": "Literal",
-                                                        "value": 1
-                                                    },
-                                                    "kind": "init"
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            },
-                            "rest": null,
-                            "generator": false,
-                            "expression": false
-                        },
-                        "kind": "init"
-                    }
-                ]
-            }
-        }
-    },
-    {
-        "type": "ExpressionStatement",
-        "expression": {
-            "type": "AssignmentExpression",
-            "operator": "=",
-            "left": {
-                "type": "Identifier",
-                "name": "man"
-            },
-            "right": {
-                "type": "FunctionExpression",
-                "id": null,
-                "params": [],
-                "defaults": [],
-                "body": {
-                    "type": "BlockStatement",
-                    "body": [
-                        {
-                            "type": "ReturnStatement",
-                            "argument": {
-                                "type": "ObjectExpression",
-                                "properties": [
-                                    {
-                                        "type": "Property",
-                                        "key": {
-                                            "type": "Identifier",
-                                            "name": "a"
-                                        },
-                                        "value": {
-                                            "type": "FunctionExpression",
-                                            "id": null,
-                                            "params": [],
-                                            "defaults": [],
-                                            "body": {
-                                                "type": "BlockStatement",
-                                                "body": [
-                                                    {
-                                                        "type": "ReturnStatement",
-                                                        "argument": {
-                                                            "type": "Literal",
-                                                            "value": 1
-                                                        }
-                                                    }
-                                                ]
-                                            },
-                                            "rest": null,
-                                            "generator": false,
-                                            "expression": false
-                                        },
-                                        "kind": "init"
-                                    },
-                                    {
-                                        "type": "Property",
-                                        "key": {
-                                            "type": "Identifier",
-                                            "name": "c"
-                                        },
-                                        "kind": "init"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                },
-                "rest": null,
-                "generator": false,
-                "expression": false
-            }
-        }
-    },
-    {
-        "type": "ExpressionStatement",
-        "expression": {
-            "type": "AssignmentExpression",
-            "operator": "=",
-            "left": {
-                "type": "Identifier",
-                "name": "hello"
+                "name": "getFuncName"
             },
             "right": {
                 "type": "FunctionExpression",
@@ -334,67 +166,7 @@
             "operator": "=",
             "left": {
                 "type": "Identifier",
-                "name": "a"
-            },
-            "right": {
-                "type": "Literal",
-                "value": 1
-            }
-        }
-    },
-    {
-        "type": "ExpressionStatement",
-        "expression": {
-            "type": "AssignmentExpression",
-            "operator": "=",
-            "left": {
-                "type": "Identifier",
-                "name": "b"
-            },
-            "right": {
-                "type": "FunctionExpression",
-                "id": null,
-                "params": [],
-                "defaults": [],
-                "body": {
-                    "type": "BlockStatement",
-                    "body": [
-                        {
-                            "type": "ReturnStatement",
-                            "argument": {
-                                "type": "ObjectExpression",
-                                "properties": [
-                                    {
-                                        "type": "Property",
-                                        "key": {
-                                            "type": "Identifier",
-                                            "name": "a"
-                                        },
-                                        "value": {
-                                            "type": "Literal",
-                                            "value": 1
-                                        },
-                                        "kind": "init"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                },
-                "rest": null,
-                "generator": false,
-                "expression": false
-            }
-        }
-    },
-    {
-        "type": "ExpressionStatement",
-        "expression": {
-            "type": "AssignmentExpression",
-            "operator": "=",
-            "left": {
-                "type": "Identifier",
-                "name": "$_coreobject_$"
+                "name": "prg"
             },
             "right": {
                 "type": "ObjectExpression",
@@ -403,11 +175,28 @@
                         "type": "Property",
                         "key": {
                             "type": "Identifier",
-                            "name": "terminate"
+                            "name": "addVariable"
                         },
                         "value": {
-                            "type": "Literal",
-                            "value": 1
+                            "type": "FunctionExpression",
+                            "id": null,
+                            "params": [],
+                            "defaults": [],
+                            "body": {
+                                "type": "BlockStatement",
+                                "body": [
+                                    {
+                                        "type": "ReturnStatement",
+                                        "argument": {
+                                            "type": "Literal",
+                                            "value": 1
+                                        }
+                                    }
+                                ]
+                            },
+                            "rest": null,
+                            "generator": false,
+                            "expression": false
                         },
                         "kind": "init"
                     },
@@ -415,7 +204,36 @@
                         "type": "Property",
                         "key": {
                             "type": "Identifier",
-                            "name": "matter"
+                            "name": "getAssignment"
+                        },
+                        "value": {
+                            "type": "FunctionExpression",
+                            "id": null,
+                            "params": [],
+                            "defaults": [],
+                            "body": {
+                                "type": "BlockStatement",
+                                "body": [
+                                    {
+                                        "type": "ReturnStatement",
+                                        "argument": {
+                                            "type": "Literal",
+                                            "value": 1
+                                        }
+                                    }
+                                ]
+                            },
+                            "rest": null,
+                            "generator": false,
+                            "expression": false
+                        },
+                        "kind": "init"
+                    },
+                    {
+                        "type": "Property",
+                        "key": {
+                            "type": "Identifier",
+                            "name": "addAssignment"
                         },
                         "value": {
                             "type": "FunctionExpression",
@@ -443,6 +261,764 @@
                 ]
             }
         }
+    },
+    {
+        "type": "ExpressionStatement",
+        "expression": {
+            "type": "AssignmentExpression",
+            "operator": "=",
+            "left": {
+                "type": "Identifier",
+                "name": "create"
+            },
+            "right": {
+                "type": "ObjectExpression",
+                "properties": [
+                    {
+                        "type": "Property",
+                        "key": {
+                            "type": "Identifier",
+                            "name": "FunctionExpression"
+                        },
+                        "value": {
+                            "type": "Literal",
+                            "value": 1
+                        },
+                        "kind": "init"
+                    },
+                    {
+                        "type": "Property",
+                        "key": {
+                            "type": "Identifier",
+                            "name": "Identifier"
+                        },
+                        "value": {
+                            "type": "Literal",
+                            "value": 1
+                        },
+                        "kind": "init"
+                    },
+                    {
+                        "type": "Property",
+                        "key": {
+                            "type": "Identifier",
+                            "name": "Literal"
+                        },
+                        "value": {
+                            "type": "Literal",
+                            "value": 1
+                        },
+                        "kind": "init"
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "type": "ExpressionStatement",
+        "expression": {
+            "type": "AssignmentExpression",
+            "operator": "=",
+            "left": {
+                "type": "Identifier",
+                "name": "addToFunction"
+            },
+            "right": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "defaults": [],
+                "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                        {
+                            "type": "ReturnStatement",
+                            "argument": {
+                                "type": "Literal",
+                                "value": 1
+                            }
+                        }
+                    ]
+                },
+                "rest": null,
+                "generator": false,
+                "expression": false
+            }
+        }
+    },
+    {
+        "type": "ExpressionStatement",
+        "expression": {
+            "type": "AssignmentExpression",
+            "operator": "=",
+            "left": {
+                "type": "Identifier",
+                "name": "$_coreobject_$"
+            },
+            "right": {
+                "type": "ObjectExpression",
+                "properties": [
+                    {
+                        "type": "Property",
+                        "key": {
+                            "type": "Identifier",
+                            "name": "handleFirstFunction"
+                        },
+                        "value": {
+                            "type": "FunctionDeclaration",
+                            "id": {
+                                "type": "Identifier",
+                                "name": "handleFirstFunction",
+                                "range": [474, 493]
+                            },
+                            "params": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "parts",
+                                    "range": [494, 499]
+                                }
+                            ],
+                            "defaults": [],
+                            "body": {
+                                "type": "BlockStatement",
+                                "body": [
+                                    {
+                                        "type": "ExpressionStatement",
+                                        "expression": {
+                                            "type": "Literal",
+                                            "value": "use strict",
+                                            "raw": "\"use strict\"",
+                                            "range": [506, 518]
+                                        },
+                                        "range": [506, 519]
+                                    },
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "declarations": [
+                                            {
+                                                "type": "VariableDeclarator",
+                                                "id": {
+                                                    "type": "Identifier",
+                                                    "name": "identifier",
+                                                    "range": [528, 538]
+                                                },
+                                                "init": null,
+                                                "range": [528, 538]
+                                            }
+                                        ],
+                                        "kind": "var",
+                                        "range": [524, 539]
+                                    },
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "declarations": [
+                                            {
+                                                "type": "VariableDeclarator",
+                                                "id": {
+                                                    "type": "Identifier",
+                                                    "name": "first",
+                                                    "range": [548, 553]
+                                                },
+                                                "init": {
+                                                    "type": "CallExpression",
+                                                    "callee": {
+                                                        "type": "MemberExpression",
+                                                        "computed": false,
+                                                        "object": {
+                                                            "type": "Identifier",
+                                                            "name": "_",
+                                                            "range": [556, 557]
+                                                        },
+                                                        "property": {
+                                                            "type": "Identifier",
+                                                            "name": "first",
+                                                            "range": [558, 563]
+                                                        },
+                                                        "range": [556, 563]
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "type": "Identifier",
+                                                            "name": "parts",
+                                                            "range": [564, 569]
+                                                        }
+                                                    ],
+                                                    "range": [556, 570]
+                                                },
+                                                "range": [548, 570]
+                                            }
+                                        ],
+                                        "kind": "var",
+                                        "range": [544, 571]
+                                    },
+                                    {
+                                        "type": "ExpressionStatement",
+                                        "expression": {
+                                            "type": "AssignmentExpression",
+                                            "operator": "=",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "identifier",
+                                                "range": [576, 586]
+                                            },
+                                            "right": {
+                                                "type": "CallExpression",
+                                                "callee": {
+                                                    "type": "Identifier",
+                                                    "name": "getFuncName",
+                                                    "range": [589, 600]
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "first",
+                                                        "range": [601, 606]
+                                                    }
+                                                ],
+                                                "range": [589, 607]
+                                            },
+                                            "range": [576, 607]
+                                        },
+                                        "range": [576, 608]
+                                    },
+                                    {
+                                        "type": "ExpressionStatement",
+                                        "expression": {
+                                            "type": "CallExpression",
+                                            "callee": {
+                                                "type": "MemberExpression",
+                                                "computed": false,
+                                                "object": {
+                                                    "type": "Identifier",
+                                                    "name": "prg",
+                                                    "range": [613, 616]
+                                                },
+                                                "property": {
+                                                    "type": "Identifier",
+                                                    "name": "addVariable",
+                                                    "range": [617, 628]
+                                                },
+                                                "range": [613, 628]
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "identifier",
+                                                    "range": [629, 639]
+                                                }
+                                            ],
+                                            "range": [613, 640]
+                                        },
+                                        "range": [613, 641]
+                                    },
+                                    {
+                                        "type": "IfStatement",
+                                        "test": {
+                                            "type": "BinaryExpression",
+                                            "operator": ">",
+                                            "left": {
+                                                "type": "MemberExpression",
+                                                "computed": false,
+                                                "object": {
+                                                    "type": "Identifier",
+                                                    "name": "parts",
+                                                    "range": [649, 654]
+                                                },
+                                                "property": {
+                                                    "type": "Identifier",
+                                                    "name": "length",
+                                                    "range": [655, 661]
+                                                },
+                                                "range": [649, 661]
+                                            },
+                                            "right": {
+                                                "type": "Literal",
+                                                "value": 1,
+                                                "raw": "1",
+                                                "range": [664, 665]
+                                            },
+                                            "range": [649, 665]
+                                        },
+                                        "consequent": {
+                                            "type": "BlockStatement",
+                                            "body": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "declarations": [
+                                                        {
+                                                            "type": "VariableDeclarator",
+                                                            "id": {
+                                                                "type": "Identifier",
+                                                                "name": "idassign",
+                                                                "range": [680, 688]
+                                                            },
+                                                            "init": {
+                                                                "type": "CallExpression",
+                                                                "callee": {
+                                                                    "type": "MemberExpression",
+                                                                    "computed": false,
+                                                                    "object": {
+                                                                        "type": "Identifier",
+                                                                        "name": "prg",
+                                                                        "range": [691, 694]
+                                                                    },
+                                                                    "property": {
+                                                                        "type": "Identifier",
+                                                                        "name": "getAssignment",
+                                                                        "range": [695, 708]
+                                                                    },
+                                                                    "range": [691, 708]
+                                                                },
+                                                                "arguments": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "name": "identifier",
+                                                                        "range": [709, 719]
+                                                                    }
+                                                                ],
+                                                                "range": [691, 720]
+                                                            },
+                                                            "range": [680, 720]
+                                                        }
+                                                    ],
+                                                    "kind": "var",
+                                                    "range": [676, 721]
+                                                },
+                                                {
+                                                    "type": "IfStatement",
+                                                    "test": {
+                                                        "type": "UnaryExpression",
+                                                        "operator": "!",
+                                                        "argument": {
+                                                            "type": "Identifier",
+                                                            "name": "idassign",
+                                                            "range": [734, 742]
+                                                        },
+                                                        "prefix": true,
+                                                        "range": [733, 742]
+                                                    },
+                                                    "consequent": {
+                                                        "type": "BlockStatement",
+                                                        "body": [
+                                                            {
+                                                                "type": "VariableDeclaration",
+                                                                "declarations": [
+                                                                    {
+                                                                        "type": "VariableDeclarator",
+                                                                        "id": {
+                                                                            "type": "Identifier",
+                                                                            "name": "newfe",
+                                                                            "range": [761, 766]
+                                                                        },
+                                                                        "init": {
+                                                                            "type": "NewExpression",
+                                                                            "callee": {
+                                                                                "type": "MemberExpression",
+                                                                                "computed": false,
+                                                                                "object": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "create",
+                                                                                    "range": [773, 779]
+                                                                                },
+                                                                                "property": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "FunctionExpression",
+                                                                                    "range": [780, 798]
+                                                                                },
+                                                                                "range": [773, 798]
+                                                                            },
+                                                                            "arguments": [],
+                                                                            "range": [769, 800]
+                                                                        },
+                                                                        "range": [761, 800]
+                                                                    }
+                                                                ],
+                                                                "kind": "var",
+                                                                "range": [757, 801]
+                                                            },
+                                                            {
+                                                                "type": "ExpressionStatement",
+                                                                "expression": {
+                                                                    "type": "CallExpression",
+                                                                    "callee": {
+                                                                        "type": "MemberExpression",
+                                                                        "computed": false,
+                                                                        "object": {
+                                                                            "type": "Identifier",
+                                                                            "name": "prg",
+                                                                            "range": [814, 817]
+                                                                        },
+                                                                        "property": {
+                                                                            "type": "Identifier",
+                                                                            "name": "addAssignment",
+                                                                            "range": [818, 831]
+                                                                        },
+                                                                        "range": [814, 831]
+                                                                    },
+                                                                    "arguments": [
+                                                                        {
+                                                                            "type": "NewExpression",
+                                                                            "callee": {
+                                                                                "type": "MemberExpression",
+                                                                                "computed": false,
+                                                                                "object": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "create",
+                                                                                    "range": [836, 842]
+                                                                                },
+                                                                                "property": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "Identifier",
+                                                                                    "range": [843, 853]
+                                                                                },
+                                                                                "range": [836, 853]
+                                                                            },
+                                                                            "arguments": [
+                                                                                {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "identifier",
+                                                                                    "range": [854, 864]
+                                                                                }
+                                                                            ],
+                                                                            "range": [832, 865]
+                                                                        },
+                                                                        {
+                                                                            "type": "Identifier",
+                                                                            "name": "newfe",
+                                                                            "range": [866, 871]
+                                                                        }
+                                                                    ],
+                                                                    "range": [814, 872]
+                                                                },
+                                                                "range": [814, 873]
+                                                            },
+                                                            {
+                                                                "type": "ExpressionStatement",
+                                                                "expression": {
+                                                                    "type": "CallExpression",
+                                                                    "callee": {
+                                                                        "type": "Identifier",
+                                                                        "name": "addToFunction",
+                                                                        "range": [886, 899]
+                                                                    },
+                                                                    "arguments": [
+                                                                        {
+                                                                            "type": "Identifier",
+                                                                            "name": "newfe",
+                                                                            "range": [900, 905]
+                                                                        },
+                                                                        {
+                                                                            "type": "CallExpression",
+                                                                            "callee": {
+                                                                                "type": "MemberExpression",
+                                                                                "computed": false,
+                                                                                "object": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "_",
+                                                                                    "range": [907, 908]
+                                                                                },
+                                                                                "property": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "rest",
+                                                                                    "range": [909, 913]
+                                                                                },
+                                                                                "range": [907, 913]
+                                                                            },
+                                                                            "arguments": [
+                                                                                {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "parts",
+                                                                                    "range": [914, 919]
+                                                                                }
+                                                                            ],
+                                                                            "range": [907, 920]
+                                                                        }
+                                                                    ],
+                                                                    "range": [886, 921]
+                                                                },
+                                                                "range": [886, 922]
+                                                            }
+                                                        ],
+                                                        "range": [743, 932]
+                                                    },
+                                                    "alternate": {
+                                                        "type": "BlockStatement",
+                                                        "body": [
+                                                            {
+                                                                "type": "IfStatement",
+                                                                "test": {
+                                                                    "type": "BinaryExpression",
+                                                                    "operator": "===",
+                                                                    "left": {
+                                                                        "type": "MemberExpression",
+                                                                        "computed": false,
+                                                                        "object": {
+                                                                            "type": "MemberExpression",
+                                                                            "computed": false,
+                                                                            "object": {
+                                                                                "type": "Identifier",
+                                                                                "name": "idassign",
+                                                                                "range": [962, 970]
+                                                                            },
+                                                                            "property": {
+                                                                                "type": "Identifier",
+                                                                                "name": "right",
+                                                                                "range": [971, 976]
+                                                                            },
+                                                                            "range": [962, 976]
+                                                                        },
+                                                                        "property": {
+                                                                            "type": "Identifier",
+                                                                            "name": "type",
+                                                                            "range": [977, 981]
+                                                                        },
+                                                                        "range": [962, 981]
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "Literal",
+                                                                        "value": "FunctionExpression",
+                                                                        "raw": "\"FunctionExpression\"",
+                                                                        "range": [986, 1006]
+                                                                    },
+                                                                    "range": [962, 1006]
+                                                                },
+                                                                "consequent": {
+                                                                    "type": "BlockStatement",
+                                                                    "body": [
+                                                                        {
+                                                                            "type": "ExpressionStatement",
+                                                                            "expression": {
+                                                                                "type": "CallExpression",
+                                                                                "callee": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "addToFunction",
+                                                                                    "range": [1089, 1102]
+                                                                                },
+                                                                                "arguments": [
+                                                                                    {
+                                                                                        "type": "MemberExpression",
+                                                                                        "computed": false,
+                                                                                        "object": {
+                                                                                            "type": "Identifier",
+                                                                                            "name": "idassign",
+                                                                                            "range": [1103, 1111]
+                                                                                        },
+                                                                                        "property": {
+                                                                                            "type": "Identifier",
+                                                                                            "name": "right",
+                                                                                            "range": [1112, 1117]
+                                                                                        },
+                                                                                        "range": [1103, 1117]
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "CallExpression",
+                                                                                        "callee": {
+                                                                                            "type": "MemberExpression",
+                                                                                            "computed": false,
+                                                                                            "object": {
+                                                                                                "type": "Identifier",
+                                                                                                "name": "_",
+                                                                                                "range": [1119, 1120]
+                                                                                            },
+                                                                                            "property": {
+                                                                                                "type": "Identifier",
+                                                                                                "name": "rest",
+                                                                                                "range": [1121, 1125]
+                                                                                            },
+                                                                                            "range": [1119, 1125]
+                                                                                        },
+                                                                                        "arguments": [
+                                                                                            {
+                                                                                                "type": "Identifier",
+                                                                                                "name": "parts",
+                                                                                                "range": [1126, 1131]
+                                                                                            }
+                                                                                        ],
+                                                                                        "range": [1119, 1132]
+                                                                                    }
+                                                                                ],
+                                                                                "range": [1089, 1133]
+                                                                            },
+                                                                            "range": [1089, 1134]
+                                                                        }
+                                                                    ],
+                                                                    "range": [1007, 1148]
+                                                                },
+                                                                "alternate": null,
+                                                                "range": [959, 1148]
+                                                            }
+                                                        ],
+                                                        "range": [945, 1158]
+                                                    },
+                                                    "range": [730, 1158]
+                                                }
+                                            ],
+                                            "range": [666, 1165]
+                                        },
+                                        "alternate": {
+                                            "type": "BlockStatement",
+                                            "body": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "declarations": [
+                                                        {
+                                                            "type": "VariableDeclarator",
+                                                            "id": {
+                                                                "type": "Identifier",
+                                                                "name": "funct",
+                                                                "range": [1188, 1193]
+                                                            },
+                                                            "init": {
+                                                                "type": "NewExpression",
+                                                                "callee": {
+                                                                    "type": "MemberExpression",
+                                                                    "computed": false,
+                                                                    "object": {
+                                                                        "type": "Identifier",
+                                                                        "name": "create",
+                                                                        "range": [1200, 1206]
+                                                                    },
+                                                                    "property": {
+                                                                        "type": "Identifier",
+                                                                        "name": "FunctionExpression",
+                                                                        "range": [1207, 1225]
+                                                                    },
+                                                                    "range": [1200, 1225]
+                                                                },
+                                                                "arguments": [],
+                                                                "range": [1196, 1227]
+                                                            },
+                                                            "range": [1188, 1227]
+                                                        }
+                                                    ],
+                                                    "kind": "var",
+                                                    "range": [1184, 1228]
+                                                },
+                                                {
+                                                    "type": "ExpressionStatement",
+                                                    "expression": {
+                                                        "type": "CallExpression",
+                                                        "callee": {
+                                                            "type": "MemberExpression",
+                                                            "computed": false,
+                                                            "object": {
+                                                                "type": "Identifier",
+                                                                "name": "funct",
+                                                                "range": [1237, 1242]
+                                                            },
+                                                            "property": {
+                                                                "type": "Identifier",
+                                                                "name": "addReturn",
+                                                                "range": [1243, 1252]
+                                                            },
+                                                            "range": [1237, 1252]
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "type": "NewExpression",
+                                                                "callee": {
+                                                                    "type": "MemberExpression",
+                                                                    "computed": false,
+                                                                    "object": {
+                                                                        "type": "Identifier",
+                                                                        "name": "create",
+                                                                        "range": [1257, 1263]
+                                                                    },
+                                                                    "property": {
+                                                                        "type": "Identifier",
+                                                                        "name": "Literal",
+                                                                        "range": [1264, 1271]
+                                                                    },
+                                                                    "range": [1257, 1271]
+                                                                },
+                                                                "arguments": [
+                                                                    {
+                                                                        "type": "Literal",
+                                                                        "value": 1,
+                                                                        "raw": "1",
+                                                                        "range": [1272, 1273]
+                                                                    }
+                                                                ],
+                                                                "range": [1253, 1274]
+                                                            }
+                                                        ],
+                                                        "range": [1237, 1275]
+                                                    },
+                                                    "range": [1237, 1276]
+                                                },
+                                                {
+                                                    "type": "ExpressionStatement",
+                                                    "expression": {
+                                                        "type": "CallExpression",
+                                                        "callee": {
+                                                            "type": "MemberExpression",
+                                                            "computed": false,
+                                                            "object": {
+                                                                "type": "Identifier",
+                                                                "name": "prg",
+                                                                "range": [1285, 1288]
+                                                            },
+                                                            "property": {
+                                                                "type": "Identifier",
+                                                                "name": "addAssignment",
+                                                                "range": [1289, 1302]
+                                                            },
+                                                            "range": [1285, 1302]
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "type": "NewExpression",
+                                                                "callee": {
+                                                                    "type": "MemberExpression",
+                                                                    "computed": false,
+                                                                    "object": {
+                                                                        "type": "Identifier",
+                                                                        "name": "create",
+                                                                        "range": [1307, 1313]
+                                                                    },
+                                                                    "property": {
+                                                                        "type": "Identifier",
+                                                                        "name": "Identifier",
+                                                                        "range": [1314, 1324]
+                                                                    },
+                                                                    "range": [1307, 1324]
+                                                                },
+                                                                "arguments": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "name": "identifier",
+                                                                        "range": [1325, 1335]
+                                                                    }
+                                                                ],
+                                                                "range": [1303, 1336]
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "name": "funct",
+                                                                "range": [1337, 1342]
+                                                            }
+                                                        ],
+                                                        "range": [1285, 1343]
+                                                    },
+                                                    "range": [1285, 1344]
+                                                }
+                                            ],
+                                            "range": [1174, 1350]
+                                        },
+                                        "range": [646, 1350]
+                                    }
+                                ],
+                                "range": [500, 1352]
+                            },
+                            "rest": null,
+                            "generator": false,
+                            "expression": false,
+                            "range": [465, 1352]
+                        },
+                        "kind": "init"
+                    }
+                ]
+            }
+        }
     }
 ]}
-
