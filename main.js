@@ -72,3 +72,19 @@ function writeToFile(outputFilename,data){
 }
 
 testCode("test.json",code);
+
+
+//if multiple pieces in parts
+//is there already an existing assignment
+//if not
+// then create a new function expression
+// add a new assignment with the identifier and the new function
+// call add to new function the rest
+//if there is an already existing assignment
+// if the assignment is a function expression
+// then add to this function the rest
+
+// if its only one function
+//create function
+// return whatever is assigned
+// add an assignment with identifier and this new function.
