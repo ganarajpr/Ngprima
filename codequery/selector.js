@@ -30,7 +30,6 @@ function processExpressions(exprs, selection){
             next = exprs[i+1];
             var pos = getPosition(next);
             var ctx = currentSelection.context.getFunctionByPosition(pos);
-            
         }
         i++;
     }
@@ -42,7 +41,6 @@ Selection.prototype.getFunctionByName = function(name){
 
 
 function getFunctionByName(name,context){
-
     for (var i = 0; i < context.childContexts.length; i++) {
         if(context.childContexts[i].name === name){
             return context.childContexts[i];
@@ -57,15 +55,6 @@ function getFunctionByName(name,context){
     }
 };
 
-
-
-
-
-function getPosition(index){
-    var num = parseInt(next,10);
-    num = num === NaN ? 0 : num;
-    return num;
-}
 
 
 

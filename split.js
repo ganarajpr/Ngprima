@@ -1,3 +1,6 @@
+/**
+ * Created by ganara.jpermunda on 29/07/2014.
+ */
 var _, getFuncName, prg, create, addToFunction, $_coreobject_$;
 _ = {
     first: function () {
