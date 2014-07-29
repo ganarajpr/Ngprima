@@ -43,16 +43,15 @@ $_coreobject_$ = {
         var identifier;
         //pure
         var first = _.first(parts);
-        //pure
+        //getter
         identifier = getFuncName(first);
-        //do
+        //setter
         prg.addVariable(identifier);
         //do
         this.branchOnPartsLengthGreaterThanOneOrNot(parts,identifier);
     },
     //switcher
     branchOnPartsLengthGreaterThanOneOrNot : function(parts,identifier){
-        //do
         if (parts.length > 1) {
             this.whenMoreThanOneParts(parts,identifier);
         } else {
@@ -66,6 +65,8 @@ $_coreobject_$ = {
         var idassign = prg.getAssignment(identifier);
         this.branchOnExistanceOfAssignment(idassign,parts);
     },
+
+    //getter
     getNewFunctionThatReturns: function (returnValue) {
         var funct = new create.FunctionExpression();
         funct.addReturn(returnValue);
@@ -79,7 +80,7 @@ $_coreobject_$ = {
         prg.addAssignment(new create.Identifier(identifier), funct);
     },
 
-
+    //switcher
     branchOnExistanceOfAssignment:function(idassign,parts){
         if(!idassign){
             this.whenNoAssignment(parts);
@@ -89,13 +90,14 @@ $_coreobject_$ = {
         }
     },
 
+    //switcher
     branchOnAssignmentRightType : function(assignmentRight,parts){
         if(assignmentRight.type === 'FunctionExpression'){
             addToFunction(idassign.right, _.rest(parts));
         }
     },
 
-
+    //sequencer
     whenNoAssignment : function(parts){
         var newfe = new create.FunctionExpression();
         prg.addAssignment(new create.Identifier(identifier), newfe);
