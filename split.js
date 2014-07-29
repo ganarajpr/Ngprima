@@ -62,26 +62,19 @@ $_coreobject_$ = {
 
     //switcher
     whenMoreThanOneParts : function(parts,identifier){
-
         //pure
         var idassign = prg.getAssignment(identifier);
-        this.branchOnExistanceOfAssignment()
-        //do
-        if (!idassign) {
-            this.whenNoAssignment(parts,identifier);
-        } else {
-            if (idassign.right.type === 'FunctionExpression') {
-                addToFunction(idassign.right, _.rest(parts));
-            }
-        }
+        this.branchOnExistanceOfAssignment(idassign,parts);
+    },
+    getNewFunctionThatReturns: function (returnValue) {
+        var funct = new create.FunctionExpression();
+        funct.addReturn(returnValue);
+        return funct;
     },
 
     //sequencer
     whenOnePart:function(parts,identifier){
-
-        var funct = new create.FunctionExpression();
-        funct.addReturn(new create.Literal(1));
-
+        var funct = this.getNewFunctionThatReturns(new create.Literal(1));
         //do
         prg.addAssignment(new create.Identifier(identifier), funct);
     },
