@@ -43,7 +43,8 @@ Program.prototype.getAssignment = function(ident){
             }
         }
     }
-}
+};
+
 
 Program.prototype.addAssignment = function(left,right){
     var assign = new Assignment(left,right);
