@@ -39,6 +39,7 @@ function Context(ast,parentContext,type,name){
     this.expressions = [];
     this.ifs = [];
     this.externals = [];
+    this.calls = [];
     //insertion points 
     // each child block statement is an insertion point.
     //we have block statements for For, If, Else, Switch etc. 
@@ -172,6 +173,7 @@ function storeExpression(context,expr){
     if(expr.type === "CallExpression" || expr.type === "NewExpression"){
         var callee = getCallee(expr.callee);
         if(callee){
+            context.calls.push(callee);
             context.expressions.push(callee);
         }
     }

@@ -6,8 +6,11 @@ var create = require("./codequery/create");
 
 var Refactor = require("./Refactor");
 var escodegen = require("escodegen");
+var _ = require('lodash');
 
-var code = fs.readFileSync("./codequery/stubber.js");
+var codegraph = require('./codegraph');
+
+var code = fs.readFileSync("./codequery/cquery.js");
 
 //var code = fs.readFileSync("test.js");
 //var code = fs.readFileSync("jquery.js");
@@ -15,16 +18,19 @@ var code = fs.readFileSync("./codequery/stubber.js");
 
 function testCode(fileName,code) {
     //var cq = new cquery(code);
-    var sel = selector.process(code);
-    var ctx = sel.getFunctionByName('handleFirstFunction');
-    ctx.processExternals();
+    //var sel = selector.process(code);
+    //var ctx = sel.getFunctionByName('handleFirstFunction');
+    //var funcMap = sel.getFunctionContextMap();
+    var g = codegraph.createGraph(code);
+    console.log(g.edges());
+    //ctx.processExternals();
     //console.log(ctx.externals);
 
-    var st = stubber.stub(ctx);
+    //var st = stubber.stub(ctx);
     //writeToFile('generated.js',st);
-    var prg = new create.Program();
+    //var prg = new create.Program();
 
-    var newCtx = Refactor(ctx,prg);
+    //var newCtx = Refactor(ctx,prg);
 
 
     /*var vnames;

@@ -51,9 +51,29 @@ function getFunctionByName(name,context){
                 return ctx;
             }
         }
-
     }
 };
+
+
+Selection.prototype.getFunctionContextMap = function(){
+    "use strict";
+    var contextMap = {};
+    getAllFunctionNames(this.context,contextMap);
+    return contextMap;
+};
+
+function getAllFunctionNames(context,contextmap){
+    "use strict";
+    for (var i = 0; i < context.childContexts.length; i++) {
+        if(context.childContexts[i].name){
+            contextmap[context.childContexts[i].name] = context.childContexts[i];
+            getAllFunctionNames(context.childContexts[i],contextmap);
+        }
+        else{
+            console.log(context.childContexts[i].parent.name);
+        }
+    }
+}
 
 
 
