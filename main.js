@@ -3,6 +3,8 @@ var fs = require('fs');
 var selector = require("./codequery/selector");
 var stubber = require("./codequery/stubber");
 var create = require("./codequery/create");
+
+var Refactor = require("./Refactor");
 var escodegen = require("escodegen");
 
 var code = fs.readFileSync("./codequery/stubber.js");
@@ -16,11 +18,14 @@ function testCode(fileName,code) {
     var sel = selector.process(code);
     var ctx = sel.getFunctionByName('handleFirstFunction');
     ctx.processExternals();
-    console.log(ctx.externals);
+    //console.log(ctx.externals);
 
     var st = stubber.stub(ctx);
-    writeToFile('generated.js',st);
-    console.log(st);
+    //writeToFile('generated.js',st);
+    var prg = new create.Program();
+
+    var newCtx = Refactor(ctx,prg);
+
 
     /*var vnames;
     vnames = ctx.variables.map(function(v){
