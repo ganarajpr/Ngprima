@@ -219,6 +219,7 @@ ArrayExpression.prototype.addItem = function(item){
 };*/
 
 
+
 module.exports = {
     Program: Program,
     VariableDeclaration: VariableDeclaration,
@@ -228,6 +229,5 @@ module.exports = {
     FunctionExpression : FunctionExpression,
     ObjectExpression : ObjectExpression,
     ArrayExpression : ArrayExpression,
-    getCallStatement : getCallStatement
-
+    getCallStatement : getCallStatement,
 };

@@ -34,6 +34,7 @@ module.exports = function (context, toContext) {
     rootContext = toContext;
 
     _.each(body,onEachExpressionInBody,toContext);
+    toContext.body.push(context.ast);
     console.log(escodegen.generate(toContext));
 
 };
@@ -99,6 +100,7 @@ function getArguments(args){
         }
         argSt += getAccessor(arg);
     });
+    return argSt;
 }
 
 function getFunctionNameFromTestExpr(test) {
@@ -127,7 +129,7 @@ function getFunctionNameFromTestExpr(test) {
 }
 function replaceIfStatementWithBranchFunction(ifexpr, index, body,toContext) {
     var funcName = getFunctionNameFromTestExpr(ifexpr.test);
-    addFunction(funcName,toContext,ifexpr);
+    addFunction(funcName,toContext,ifexpr,true);
     _.each(ifexpr.consequent.body,onEachExpressionInBody,toContext);
     if(ifexpr.alternate){
         _.each(ifexpr.alternate.body,onEachExpressionInBody,toContext);
@@ -155,10 +157,16 @@ function isIfStatement(expr){
 /*
 * Where to put these additionally created functions!
 * */
-function addFunction(funcName,toContext,ifSt){
+function addFunction(funcName,toContext,ifSt,isDecl){
     "use strict";
     var func = new create.FunctionExpression(funcName);
-    toContext.addAssignment(new create.Identifier(funcName),func);
+    if(isDecl){
+        func.type = esprima.Syntax.FunctionDeclaration;
+        toContext.body.push(func);
+    }
+    else{
+        toContext.addAssignment(new create.Identifier(funcName),func);
+    }
     func.body.body.push(ifSt);
 }
 
