@@ -79,6 +79,15 @@ function getOperator(operator) {
         case '>==':
             return 'greaterThanOrEqualTo';
         break;
+        case '!':
+            return 'not';
+        break;
+        case '&&':
+            return '_and_';
+        break;
+        case '||':
+            return '_or_';
+        break;
     }
 }
 
@@ -103,6 +112,12 @@ function getFunctionNameFromTestExpr(test) {
         break;
         case esprima.Syntax.BinaryExpression:
             funcName += getAccessor(test.left) + getOperator(test.operator) + getAccessor(test.right) ;
+        break;
+        case esprima.Syntax.UnaryExpression:
+            funcName += getOperator(test.operator) + 'ExistanceOf' + getAccessor(test.argument);
+        break;
+        case esprima.Syntax.LogicalExpression:
+            funcName += getAccessor(test.left) + getOperator(test.operator) + getAccessor(test.right);
         break;
         case esprima.Syntax.CallExpression:
             funcName += getArguments(test.arguments) + getAccessor(test.callee);
