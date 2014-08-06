@@ -19,7 +19,7 @@ var code = fs.readFileSync("./codequery/stubber.js");
 function testCode(fileName,code) {
     //var cq = new cquery(code);
     var sel = selector.process(code);
-    var ctx = sel.getFunctionByName('convertExpression');
+    var ctx = sel.getFunctionByName('addToObject');
     //var funcMap = sel.getFunctionContextMap();
     /*var g = codegraph.createGraph(code);
     console.log(g.edges());*/

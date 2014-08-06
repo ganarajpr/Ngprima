@@ -134,10 +134,10 @@ function replaceIfStatementWithBranchFunction(ifexpr, index, body,toContext) {
     if(ifexpr.alternate){
         _.each(ifexpr.alternate.body,onEachExpressionInBody,toContext);
     }
-
-    body.splice(index,1, create.getCallStatement(funcName));
-
-
+    var funcCall = create.getCallStatement(funcName);
+    body.splice(index,1, funcCall);
+    //get externals from funcCall and variables from body's function context
+    // externals which match the vars can be passed as arguments
 }
 
 function onEachExpressionInBody(expr,index,body){
