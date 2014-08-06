@@ -32,17 +32,10 @@ module.exports = function (context, toContext) {
         body = context.ast.body.body;
     }
     rootContext = toContext;
+
     _.each(body,onEachExpressionInBody,toContext);
     console.log(escodegen.generate(toContext));
 
-
-
-
-    /*var locations = _.compact(_.map(body,ifLocations));
-    var ifSt = body.splice(locations[0],1);
-    addFunction('test',toContext,ifSt[0]);
-    //console.log(JSON.stringify(toContext));
-    console.log(escodegen.generate(toContext));*/
 };
 
 
@@ -79,21 +72,40 @@ function getOperator(operator) {
             return 'isNotEqualTo';
         break;
         case '<=':
+        case '<==':
             return 'lessThanOrEqualTo';
         break;
         case '>=':
+        case '>==':
             return 'greaterThanOrEqualTo';
         break;
     }
 }
+
+function getArguments(args){
+    var argSt = '';
+    _.each(args,function(arg,index){
+        if(index > 0){
+            argSt += '_and_';
+        }
+        argSt += getAccessor(arg);
+    });
+}
+
 function getFunctionNameFromTestExpr(test) {
     var funcName = 'branchOn';
     switch(test.type){
-        case "Identifier":
+        case esprima.Syntax.Identifier:
             funcName += 'ExistanceOf' + test.name;
         break;
-        case "BinaryExpression":
+        case esprima.Syntax.Literal:
+            funcName += test.value;
+        break;
+        case esprima.Syntax.BinaryExpression:
             funcName += getAccessor(test.left) + getOperator(test.operator) + getAccessor(test.right) ;
+        break;
+        case esprima.Syntax.CallExpression:
+            funcName += getArguments(test.arguments) + getAccessor(test.callee);
         break;
     }
     return funcName;
@@ -101,16 +113,13 @@ function getFunctionNameFromTestExpr(test) {
 function replaceIfStatementWithBranchFunction(ifexpr, index, body,toContext) {
     var funcName = getFunctionNameFromTestExpr(ifexpr.test);
     addFunction(funcName,toContext,ifexpr);
+    _.each(ifexpr.consequent.body,onEachExpressionInBody,toContext);
+    if(ifexpr.alternate){
+        _.each(ifexpr.alternate.body,onEachExpressionInBody,toContext);
+    }
     body.splice(index,1);
 
 }
-
-
-
-
-
-
-
 
 function onEachExpressionInBody(expr,index,body){
     //when do you separate out the ifStatement to its own function ?
@@ -132,21 +141,3 @@ function addFunction(funcName,toContext,ifSt){
     func.body.body.push(ifSt);
 }
 
-
-function ifLocations(expr,index){
-    "use strict";
-    if(expr.type === esprima.Syntax.IfStatement){
-        return index;
-    }
-    return null;
-}
-
-function getIfStatements(expressions) {
-    return _.filter(expressions, function (expression) {
-        return expression.type === esprima.Syntax.IfStatement;
-    });
-}
-
-function processIf(ifStatement) {
-
-}
