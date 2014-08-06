@@ -155,6 +155,25 @@ FunctionExpression.prototype.getReturnValue = function(){
 };
 
 
+function CallExpression(callee,args){
+    this.type = 'CallExpression';
+    this.callee = new Identifier(callee);
+    this.arguments = [];
+    if(args){
+        this.arguments = args;
+    }
+}
+
+
+function getCallStatement(callee,args){
+    var cExp = new CallExpression(callee,args);
+    var expr = new ExpressionStatement(cExp);
+    return expr;
+}
+
+
+
+
 
 function ReturnStatement(arg){
     this.type = 'ReturnStatement';
@@ -208,6 +227,7 @@ module.exports = {
     Literal : Literal,
     FunctionExpression : FunctionExpression,
     ObjectExpression : ObjectExpression,
-    ArrayExpression : ArrayExpression
+    ArrayExpression : ArrayExpression,
+    getCallStatement : getCallStatement
 
 };

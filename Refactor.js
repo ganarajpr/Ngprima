@@ -132,7 +132,9 @@ function replaceIfStatementWithBranchFunction(ifexpr, index, body,toContext) {
     if(ifexpr.alternate){
         _.each(ifexpr.alternate.body,onEachExpressionInBody,toContext);
     }
-    body.splice(index,1);
+
+    body.splice(index,1, create.getCallStatement(funcName));
+
 
 }
 
@@ -149,6 +151,10 @@ function isIfStatement(expr){
     return expr.type === esprima.Syntax.IfStatement;
 }
 
+
+/*
+* Where to put these additionally created functions!
+* */
 function addFunction(funcName,toContext,ifSt){
     "use strict";
     var func = new create.FunctionExpression(funcName);
