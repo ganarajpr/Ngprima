@@ -10,7 +10,7 @@ var _ = require('lodash');
 
 var codegraph = require('./codegraph');
 
-var code = fs.readFileSync("./codequery/stubber.js");
+var code = fs.readFileSync("./Refactor.js");
 
 //var code = fs.readFileSync("test.js");
 //var code = fs.readFileSync("jquery.js");
@@ -19,18 +19,19 @@ var code = fs.readFileSync("./codequery/stubber.js");
 function testCode(fileName,code) {
     //var cq = new cquery(code);
     var sel = selector.process(code);
-    var ctx = sel.getFunctionByName('addToObject');
+    var ctx = sel.getFunctionByName('exports');
     //var funcMap = sel.getFunctionContextMap();
     /*var g = codegraph.createGraph(code);
     console.log(g.edges());*/
-    //ctx.processExternals();
+    ctx.processExternals();
+
     //console.log(ctx.externals);
 
     //var st = stubber.stub(ctx);
     //writeToFile('generated.js',st);
     var prg = new create.Program();
 
-    Refactor(ctx,prg);
+    //Refactor(ctx,prg);
 
 
     /*var vnames;

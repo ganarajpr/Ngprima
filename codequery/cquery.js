@@ -19,7 +19,8 @@ var escodegenOptions = {
 };
 
 var contexts = [];
-var cq = module.exports.process = function (code) {
+var cq = {};
+cq.process = function (code) {
     var ast = esprima.parse(code, esprimaOptions);
     var rootContext = new Context(ast,null,ast.type,"__$$PROGRAM$$__");
     return rootContext;
@@ -40,6 +41,8 @@ function Context(ast,parentContext,type,name){
     this.ifs = [];
     this.externals = [];
     this.calls = [];
+    this.assignmentLefts = [];
+    this.isSetter = false;
     //insertion points 
     // each child block statement is an insertion point.
     //we have block statements for For, If, Else, Switch etc. 
@@ -62,8 +65,8 @@ Context.prototype.print = function(){
     console.log(this.expressions);
     this.childContexts.forEach(function(context){
         context.print();
-    })
-}
+    });
+};
 
 Context.prototype.processExternals = function(){
     var groupedByFirst = _.groupBy(this.expressions,function(expr){
@@ -79,7 +82,15 @@ Context.prototype.processExternals = function(){
         .uniq();
 
     this.externals = externals.value();
+    var externalAssignments = _.intersection(this.externals,this.assignmentLefts);
+    if(externalAssignments.length){
+        console.log(externalAssignments);
+        this.isSetter = true;
+    }
+
 };
+
+
 
 
 Context.prototype.toString = function () {
@@ -163,6 +174,19 @@ function processSequenceExpression(context, expr) {
         storeExpression(context,expression);
     });
 }
+
+
+function processAssignmentLeft(expr,context){
+    "use strict";
+    if(expr.type === "MemberExpression"){
+        context.assignmentLefts.push(resolveMemberExpression(expr));
+    }
+    if(expr.type === "Identifier"){
+        context.assignmentLefts.push(expr.name);
+    }
+}
+
+
 function storeExpression(context,expr){
     if(expr.type === "MemberExpression"){
         context.expressions.push(resolveMemberExpression(expr));
@@ -324,6 +348,7 @@ function processAssignment(context,expr){
         processExpressionStatement(context,expression.right);
 
     }
+    processAssignmentLeft(expression.left,context);
     processExpressionStatement(context,expression.left);
 }
 
@@ -449,6 +474,8 @@ function Variable(name,ast,context){
     this.ast = ast;
     this.context = context;
 }
+
+module.exports = cq;
 
 
 
