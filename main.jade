@@ -4,7 +4,8 @@ mixin FunctionDeclaration(node)
 
 mixin fn(node)
     .token.function function
-    identifier(name=node.id.name)
+    if node.id
+        identifier(name=node.id.name)
     .token.punctuation (
     +params(node.params)
     .token.punctuation )
@@ -38,7 +39,7 @@ mixin property(node)
 
 mixin literal(node)
     .literal
-        .token.value !{node.value}
+        .token.value #{node.raw}
 
 mixin ObjectExpression(node)
     .objectexpression
@@ -53,7 +54,7 @@ mixin ArrayExpression(node)
     .arrayexpression
         .token.punctuation [
         each elem,index in node.elements
-            +property(elem)
+            +expression(elem)
             if index <= node.elements.length - 1
                 .token.punctuation ,
         .token.punctuation ]
@@ -80,6 +81,10 @@ mixin CallExpression(node)
 
 mixin AssignmentExpression(node)
     .AssignmentExpression
+        +expression(node.left)
+        .token.operator =
+        +expression(node.right)
+
 
 mixin BinaryExpression(node)
     .BinaryExpression
@@ -107,7 +112,7 @@ mixin expression(node)
         +BinaryExpression(node)
     if node.type === 'Identifier'
         identifier(name=node.name)
-    if node.type === 'Identifier'
+    if node.type === 'Literal'
         +literal(node)
 
 mixin body(node)
@@ -129,7 +134,7 @@ mixin program(node)
 mixin arguments(args)
     each val,index in args
         +expression(val)
-        if index <= args.length - 1
+        if index < args.length - 1
             .token.punctuation ,
 
 mixin params(params)
@@ -141,6 +146,7 @@ mixin params(params)
 
 mixin ExpressionStatement(node)
     .expressionstatement
+        +expression(node.expression)
 
 
 +program(body)

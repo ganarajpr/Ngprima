@@ -476,6 +476,3 @@ function Variable(name,ast,context){
 }
 
 module.exports = cq;
-
-
-
