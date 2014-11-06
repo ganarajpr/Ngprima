@@ -1,18 +1,21 @@
 {
-    "name": "Ngprima"
-  , "description": "AngularJS analysis with Esprima"
-  , "version": "0.0.1"
-  , "keywords": ["angular", "esprima"]
-  , "homepage": "http://www.nebithi.com"
-  , "author": "Ganaraj P R"
-  , "devDependencies": {
-      "esprima": "latest"
-    , "verbal-expressions": "latest"
-    , "escodegen": "latest"
+  "name": "Ngprima",
+  "description": "AngularJS analysis with Esprima",
+  "version": "0.0.1",
+  "keywords": [
+    "angular",
+    "esprima"
+  ],
+  "homepage": "http://www.nebithi.com",
+  "author": "Ganaraj P R",
+  "devDependencies": {
+    "esprima": "latest",
+    "verbal-expressions": "latest",
+    "escodegen": "latest"
+  },
+  "dependencies": {
+    "jade": "^1.7.0",
+    "jasmine-node": "latest",
+    "lodash": "latest"
   }
-    ,"dependencies" : {
-        "lodash" : "latest",
-        "jasmine-node" : "latest"
-
-    }
 }

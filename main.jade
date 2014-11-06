@@ -1,0 +1,146 @@
+mixin FunctionDeclaration(node)
+    .functiondeclaration(scope-creator='true')
+        +fn(node)
+
+mixin fn(node)
+    .token.function function
+    identifier(name=node.id.name)
+    .token.punctuation (
+    +params(node.params)
+    .token.punctuation )
+    .token.punctuation {
+    br
+    +body(node.body.body)
+    .token.punctuation }
+    br
+
+
+
+
+mixin VariableDeclaration(node)
+    .variabledeclaration
+        .token.keyword #{node.kind}
+        each decl,index in node.declarations
+            +VariableDeclarator(decl)
+            if index <= node.declarations.length - 1
+                .token.punctuation ,
+
+mixin VariableDeclarator(node)
+    .variabledeclarator
+        identifier(name=node.id.name)
+        if node.init
+            .token.punctuation =
+            +expression(node.init)
+
+
+mixin property(node)
+    .property
+
+mixin literal(node)
+    .literal
+        .token.value !{node.value}
+
+mixin ObjectExpression(node)
+    .objectexpression
+        .token.punctuation {
+        each prop,index in node.properties
+            +property(prop)
+            if index <= node.properties.length - 1
+                .token.punctuation ,
+        .token.punctuation }
+
+mixin ArrayExpression(node)
+    .arrayexpression
+        .token.punctuation [
+        each elem,index in node.elements
+            +property(elem)
+            if index <= node.elements.length - 1
+                .token.punctuation ,
+        .token.punctuation ]
+
+mixin FunctionExpression(node)
+    .functionexpression(scope-creator='true')
+        +fn(node)
+
+mixin ThisExpression(node)
+    .thisexpression this
+
+mixin MemberExpression(node)
+    .memberexpression
+        +expression(node.object)
+        .token.punctuation .
+        identifier(name=node.property.name)
+
+mixin CallExpression(node)
+    .callexpression
+        +expression(node.callee)
+        .token.punctuation (
+        +arguments(node.arguments)
+        .token.punctuation )
+
+mixin AssignmentExpression(node)
+    .AssignmentExpression
+
+mixin BinaryExpression(node)
+    .BinaryExpression
+        +expression(node.left)
+        .token.operator #{node.operator}
+        +expression(node.left)
+
+
+mixin expression(node)
+    if node.type === 'MemberExpression'
+        +MemberExpression(node)
+    if node.type === 'ArrayExpression'
+        +ArrayExpression(node)
+    if node.type === 'ObjectExpression'
+        +ObjectExpression(node)
+    if node.type === 'ThisExpression'
+        +ThisExpression(node)
+    if node.type === 'AssignmentExpression'
+        +AssignmentExpression(node)
+    if node.type === 'FunctionExpression'
+        +FunctionExpression(node)
+    if node.type === 'CallExpression'
+        +CallExpression(node)
+    if node.type === 'BinaryExpression'
+        +BinaryExpression(node)
+    if node.type === 'Identifier'
+        identifier(name=node.name)
+    if node.type === 'Identifier'
+        +literal(node)
+
+mixin body(node)
+    .body
+        each val,index in node
+            if val.type === 'VariableDeclaration'
+                +VariableDeclaration(val)
+            if val.type === 'FunctionDeclaration'
+                +FunctionDeclaration(val)
+            if val.type === 'ExpressionStatement'
+                +ExpressionStatement(val)
+            if val.type === 'ForStatement'
+                .for
+
+mixin program(node)
+    .program(scope-creator='true')
+        +body(node)
+
+mixin arguments(args)
+    each val,index in args
+        +expression(val)
+        if index <= args.length - 1
+            .token.punctuation ,
+
+mixin params(params)
+    span.params
+        each val,index in params
+            identifier(name=val.name)
+            if index < params.length - 1
+                .token.punctuation ,
+
+mixin ExpressionStatement(node)
+    .expressionstatement
+
+
++program(body)
