@@ -341,8 +341,9 @@ mixin SwitchStatement(node)
     .token.punctuation.end }
 
 mixin body(node)
-    each val,index in node
-        +Statement(val)
+    .body
+        each val,index in node
+            +Statement(val)
 
 mixin arguments(args)
     each val,index in args
