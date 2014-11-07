@@ -167,6 +167,12 @@ mixin Statement(node)
         +ExpressionStatement(node)
     if node.type === 'ForStatement'
         +ForStatement(node)
+    if node.type === 'ForInStatement'
+        +ForInStatement(node)
+    if node.type === 'WhileStatement'
+        +WhileStatement(node)
+    if node.type === 'DoWhileStatement'
+        +DoWhileStatement(node)
     if node.type === 'IfStatement'
         +IfStatement(node)
     if node.type === 'BreakStatement'
@@ -177,7 +183,82 @@ mixin Statement(node)
         +VariableDeclaration(node)
     if node.type === 'FunctionDeclaration'
         +FunctionDeclaration(node)
+    if node.type === 'SwitchStatement'
+        +SwitchStatement(node)
+    if node.type === 'ThrowStatement'
+        +ThrowStatement(node)
+    if node.type === 'ReturnStatement'
+        +ReturnStatement(node)
+    if node.type === 'DebuggerStatement'
+        +DebuggerStatement(node)
+    if node.type === 'WithStatement'
+        +WithStatement(node)
+    if node.type === 'LabeledStatement'
+        +LabeledStatement(node)
+    if node.type === 'TryStatement'
+        +TryStatement(node)
 
+
+
+mixin WhileStatement(node)
+    .WhileStatement
+        .token.keyword while
+        .token.punctuation (
+        +expression(node.test)
+        .token.punctuation )
+        .token.punctuation {
+        +Statement(node.body)
+        .token.punctuation }
+
+mixin DoWhileStatement(node)
+    .DoWhileStatement
+        .token.keyword do
+        .token.punctuation {
+        +Statement(node.body)
+        .token.punctuation }
+        .token.keyword while
+        .token.punctuation (
+        +expression(node.test)
+        .token.punctuation )
+
+
+
+mixin ForInStatement(node)
+    .ForInStatement
+        .token.keyword for
+        if node.each
+            .token.keyword each
+        .token.punctuation (
+        if node.left === 'VariableDeclaration'
+            +VariableDeclaration(node.left)
+        else
+            +expression(node.left)
+        .token.keyword in
+        +expression(node.right)
+        .token.punctuation )
+        .token.punctuation {
+        +Statement(node.body)
+        .token.punctuation }
+
+
+mixin TryStatement(node)
+    .token.keyword try
+    .token.punctuation {
+    +BlockStatement(node.block)
+    .token.punctuation }
+    each guard,index in node.handlers
+        +CatchClause(guard)
+    if node.finalizer
+        +BlockStatement(node.finalizer)
+
+mixin CatchClause(node)
+    .token.keyword catch
+    .token.punctuation (
+    identifier(name=node.param.name)
+    .token.punctuation )
+    .token.punctuation {
+    +BlockStatement(node.body)
+    .token.punctuation }
 
 mixin BreakStatement(node)
     .BreakStatement
