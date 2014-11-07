@@ -15,9 +15,6 @@ mixin fn(node)
     .token.punctuation }
     br
 
-
-
-
 mixin VariableDeclaration(node)
     .variabledeclaration
         .token.keyword #{node.kind}
@@ -93,7 +90,7 @@ mixin BinaryExpression(node)
     .BinaryExpression
         +expression(node.left)
         .token.operator #{node.operator}
-        +expression(node.left)
+        +expression(node.right)
 
 
 mixin expression(node)
@@ -118,17 +115,131 @@ mixin expression(node)
     if node.type === 'Literal'
         +literal(node)
 
+
+mixin ForStatement(node)
+    .ForStatement
+        .token.keyword for
+        .token.punctuation (
+        if node.init
+            if node.init.type === 'VariableDeclaration'
+                +VariableDeclaration(node.init)
+            else
+                +expression(node.init)
+        .token.punctuation ;
+        if node.test
+            +expression(node.test)
+        .token.punctuation ;
+        if node.update
+            +expression(node.update)
+        .token.punctuation )
+        .token.punctuation {
+            +body(node.body)
+        .token.punctuation }
+
+
+mixin IfStatement(node)
+    .IfStatement
+        .token.keyword if
+        .token.punctuation (
+        +expression(node.test)
+        .token.punctuation )
+        .token.punctuation {
+        +body(node.consequent.body)
+        .token.punctuation }
+        if node.alternate
+            +body(node.alternate.body)
+
 mixin body(node)
-    .body
-        each val,index in node
-            if val.type === 'VariableDeclaration'
-                +VariableDeclaration(val)
-            if val.type === 'FunctionDeclaration'
-                +FunctionDeclaration(val)
-            if val.type === 'ExpressionStatement'
-                +ExpressionStatement(val)
-            if val.type === 'ForStatement'
-                .for
+    each val,index in node
+        +Statement(val)
+
+
+mixin EmptyStatement(node)
+    .EmptyStatement
+    .token.punctuation ;
+
+mixin BlockStatement(node)
+    +body(node.body)
+
+
+mixin Statement(node)
+    if node.type === 'ExpressionStatement'
+    +ExpressionStatement(val)
+    if node.type === 'ForStatement'
+        +ForStatement(val)
+    if node.type === 'IfStatement'
+        +IfStatement(val)
+
+
+mixin BreakStatement(node)
+    .BreakStatement
+    .token.keyword break
+    if node.label
+        identifier(name=node.label.name)
+    .token.punctuation ;
+
+mixin ContinueStatement(node)
+    .ContinueStatement
+    .token.keyword continue
+    if node.label
+        identifier(name=node.label.name)
+    .token.punctuation ;
+
+
+mixin ReturnStatement(node)
+    .ReturnStatement
+    .token.keyword return
+    if node.argument
+        +expression(node.argument)
+    .token.punctuation ;
+
+mixin WithStatement(node)
+    .WithStatement
+    .token.keyword with
+    .token.punctuation (
+    +expression(node.object)
+    .token.punctuation )
+    .token.punctuation {
+    +Statement(node.body)
+    .token.punctuation }
+
+
+mixin LabeledStatement(node)
+    .LabeledStatement
+    identifier(name=node.label.name)
+    .token.punctuation :
+    +Statement(node.body)
+
+
+mixin DebuggerStatement(node)
+    .DebuggerStatement
+    .token.keyword debugger
+    .token.punctuation ;
+
+mixin ThrowStatement(node)
+    .ThrowStatement
+    .token.keyword throw
+    +expression(node.argument)
+
+
+mixin SwitchCases(node)
+    .token.keyword case
+    if node.test
+        +expression(node.test)
+    .token.punctuation :
+    +body(node.consequent)
+
+mixin SwitchStatement(node)
+    .SwitchStatement
+    .token.keyword switch
+    .token.punctuation (
+    +expression(node.discriminant)
+    .token.punctuation )
+    .token.punctuation {
+    each case,index in node.cases
+        +SwitchCases(case)
+    .token.punctuation }
+
 
 mixin program(node)
     .program(scope-creator='true')
