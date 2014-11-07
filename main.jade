@@ -1,3 +1,4 @@
+
 mixin FunctionDeclaration(node)
     .functiondeclaration(scope-creator='true')
         +fn(node)
@@ -23,68 +24,6 @@ mixin VariableDeclaration(node)
             if index <= node.declarations.length - 1
                 .token.punctuation ,
 
-mixin VariableDeclarator(node)
-    .variabledeclarator
-        identifier(name=node.id.name)
-        if node.init
-            .token.punctuation =
-            +expression(node.init)
-
-
-mixin property(node)
-    .property
-        identifier(name=node.key.name)
-        .token.punctuation :
-        +expression(node.value)
-
-mixin literal(node)
-    .literal
-        .token.value #{node.raw}
-
-mixin ObjectExpression(node)
-    .objectexpression
-        .token.punctuation {
-        each prop,index in node.properties
-            +property(prop)
-            if index < node.properties.length - 1
-                .token.punctuation ,
-        .token.punctuation }
-
-mixin ArrayExpression(node)
-    .arrayexpression
-        .token.punctuation [
-        each elem,index in node.elements
-            +expression(elem)
-            if index < node.elements.length - 1
-                .token.punctuation ,
-        .token.punctuation ]
-
-mixin FunctionExpression(node)
-    .functionexpression(scope-creator='true')
-        +fn(node)
-
-mixin ThisExpression(node)
-    .thisexpression this
-
-mixin MemberExpression(node)
-    .memberexpression
-        +expression(node.object)
-        .token.punctuation .
-        identifier(name=node.property.name)
-
-mixin CallExpression(node)
-    .callexpression
-        +expression(node.callee)
-        .token.punctuation (
-        +arguments(node.arguments)
-        .token.punctuation )
-
-mixin AssignmentExpression(node)
-    .AssignmentExpression
-        +expression(node.left)
-        .token.operator =
-        +expression(node.right)
-
 
 mixin BinaryExpression(node)
     .BinaryExpression
@@ -92,79 +31,16 @@ mixin BinaryExpression(node)
         .token.operator #{node.operator}
         +expression(node.right)
 
-
-mixin expression(node)
-    if node.type === 'MemberExpression'
-        +MemberExpression(node)
-    if node.type === 'ArrayExpression'
-        +ArrayExpression(node)
-    if node.type === 'ObjectExpression'
-        +ObjectExpression(node)
-    if node.type === 'ThisExpression'
-        +ThisExpression(node)
-    if node.type === 'AssignmentExpression'
-        +AssignmentExpression(node)
-    if node.type === 'FunctionExpression'
-        +FunctionExpression(node)
-    if node.type === 'CallExpression'
-        +CallExpression(node)
-    if node.type === 'BinaryExpression'
-        +BinaryExpression(node)
-    if node.type === 'Identifier'
-        identifier(name=node.name)
-    if node.type === 'Literal'
-        +literal(node)
-
-
-mixin ForStatement(node)
-    .ForStatement
-        .token.keyword for
-        .token.punctuation (
-        if node.init
-            if node.init.type === 'VariableDeclaration'
-                +VariableDeclaration(node.init)
-            else
-                +expression(node.init)
-        .token.punctuation ;
-        if node.test
-            +expression(node.test)
-        .token.punctuation ;
-        if node.update
-            +expression(node.update)
-        .token.punctuation )
-        .token.punctuation {
-            +body(node.body)
-        .token.punctuation }
-
-
-mixin IfStatement(node)
-    .IfStatement
-        .token.keyword if
-        .token.punctuation (
-        +expression(node.test)
-        .token.punctuation )
-        .token.punctuation {
-        +Statement(node.consequent)
-        .token.punctuation }
-        if node.alternate
-            +Statement(node.alternate)
-
-mixin body(node)
-    each val,index in node
-        +Statement(val)
-
-
-mixin EmptyStatement(node)
-    .EmptyStatement
-    .token.punctuation ;
-
-mixin BlockStatement(node)
-    +body(node.body)
+mixin literal(node)
+    .literal
+        .token.value #{node.raw}
 
 
 mixin Statement(node)
     if node.type === 'ExpressionStatement'
         +ExpressionStatement(node)
+    if node.type === 'BlockStatement'
+        +BlockStatement(node)
     if node.type === 'ForStatement'
         +ForStatement(node)
     if node.type === 'ForInStatement'
@@ -174,6 +50,8 @@ mixin Statement(node)
     if node.type === 'DoWhileStatement'
         +DoWhileStatement(node)
     if node.type === 'IfStatement'
+        +IfStatement(node)
+    if node.type === 'Statement'
         +IfStatement(node)
     if node.type === 'BreakStatement'
         +BreakStatement(node)
@@ -199,6 +77,136 @@ mixin Statement(node)
         +TryStatement(node)
 
 
+
+mixin VariableDeclarator(node)
+    .variabledeclarator
+        identifier(name=node.id.name)
+        if node.init
+            .token.punctuation =
+            +expression(node.init)
+
+mixin expression(node)
+    if node.type === 'MemberExpression'
+        +MemberExpression(node)
+    if node.type === 'ArrayExpression'
+        +ArrayExpression(node)
+    if node.type === 'ObjectExpression'
+        +ObjectExpression(node)
+    if node.type === 'ThisExpression'
+        +ThisExpression(node)
+    if node.type === 'AssignmentExpression'
+        +AssignmentExpression(node)
+    if node.type === 'FunctionExpression'
+        +FunctionExpression(node)
+    if node.type === 'CallExpression'
+        +CallExpression(node)
+    if node.type === 'BinaryExpression'
+        +BinaryExpression(node)
+    if node.type === 'Identifier'
+        identifier(name=node.name)
+    if node.type === 'Literal'
+        +literal(node)
+
+mixin CallExpression(node)
+    .callexpression
+        +expression(node.callee)
+        .token.punctuation (
+        +arguments(node.arguments)
+        .token.punctuation )
+
+mixin ObjectExpression(node)
+    .objectexpression
+        .token.punctuation {
+        each prop,index in node.properties
+            +property(prop)
+            if index < node.properties.length - 1
+                .token.punctuation ,
+        .token.punctuation }
+
+mixin property(node)
+    .property
+        identifier(name=node.key.name)
+        .token.punctuation :
+        +expression(node.value)
+
+mixin ArrayExpression(node)
+    .arrayexpression
+        .token.punctuation [
+        each elem,index in node.elements
+            +expression(elem)
+            if index < node.elements.length - 1
+                .token.punctuation ,
+        .token.punctuation ]
+
+
+mixin AssignmentExpression(node)
+    .AssignmentExpression
+        +expression(node.left)
+        .token.operator =
+        +expression(node.right)
+
+mixin MemberExpression(node)
+    .memberexpression
+        +expression(node.object)
+        .token.punctuation .
+        identifier(name=node.property.name)
+
+mixin FunctionExpression(node)
+    .functionexpression(scope-creator='true')
+        +fn(node)
+
+mixin ThisExpression(node)
+    .thisexpression this
+
+mixin BlockStatement(node)
+    +body(node.body)
+
+mixin ReturnStatement(node)
+    .ReturnStatement
+    .token.keyword return
+    if node.argument
+        +expression(node.argument)
+    .token.punctuation ;
+
+mixin IfStatement(node)
+    .IfStatement
+        .token.keyword if
+        .token.punctuation (
+        +expression(node.test)
+        .token.punctuation )
+        .token.punctuation {
+        +Statement(node.consequent)
+        .token.punctuation }
+        if node.alternate
+            +Statement(node.alternate)
+
+
+mixin ForStatement(node)
+    .ForStatement
+        .token.keyword for
+        .token.punctuation (
+        if node.init
+            if node.init.type === 'VariableDeclaration'
+                +VariableDeclaration(node.init)
+            else
+                +expression(node.init)
+        .token.punctuation ;
+        if node.test
+            +expression(node.test)
+        .token.punctuation ;
+        if node.update
+            +expression(node.update)
+        .token.punctuation )
+        .token.punctuation {
+            +body(node.body)
+        .token.punctuation }
+
+mixin EmptyStatement(node)
+    .EmptyStatement
+    .token.punctuation ;
+
+mixin BlockStatement(node)
+    +body(node.body)
 
 mixin WhileStatement(node)
     .WhileStatement
@@ -275,13 +283,6 @@ mixin ContinueStatement(node)
     .token.punctuation ;
 
 
-mixin ReturnStatement(node)
-    .ReturnStatement
-    .token.keyword return
-    if node.argument
-        +expression(node.argument)
-    .token.punctuation ;
-
 mixin WithStatement(node)
     .WithStatement
     .token.keyword with
@@ -311,6 +312,9 @@ mixin ThrowStatement(node)
     +expression(node.argument)
 
 
+
+
+
 mixin SwitchCases(node)
     .token.keyword case
     if node.test
@@ -325,14 +329,13 @@ mixin SwitchStatement(node)
     +expression(node.discriminant)
     .token.punctuation )
     .token.punctuation {
-    each case,index in node.cases
-        +SwitchCases(case)
+    each switchcase,index in node.cases
+        +SwitchCases(switchcase)
     .token.punctuation }
 
-
-mixin program(node)
-    .program(scope-creator='true')
-        +body(node)
+mixin body(node)
+    each val,index in node
+        +Statement(val)
 
 mixin arguments(args)
     each val,index in args
@@ -349,6 +352,11 @@ mixin params(params)
 mixin ExpressionStatement(node)
     .expressionstatement
         +expression(node.expression)
+
+
+mixin program(node)
+    .program(scope-creator='true')
+        +body(node)
 
 
 +program(body)
