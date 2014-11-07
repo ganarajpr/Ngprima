@@ -36,6 +36,9 @@ mixin VariableDeclarator(node)
 
 mixin property(node)
     .property
+        identifier(name=node.key.name)
+        .token.punctuation :
+        +expression(node.value)
 
 mixin literal(node)
     .literal
@@ -46,7 +49,7 @@ mixin ObjectExpression(node)
         .token.punctuation {
         each prop,index in node.properties
             +property(prop)
-            if index <= node.properties.length - 1
+            if index < node.properties.length - 1
                 .token.punctuation ,
         .token.punctuation }
 
@@ -55,7 +58,7 @@ mixin ArrayExpression(node)
         .token.punctuation [
         each elem,index in node.elements
             +expression(elem)
-            if index <= node.elements.length - 1
+            if index < node.elements.length - 1
                 .token.punctuation ,
         .token.punctuation ]
 
@@ -138,11 +141,10 @@ mixin arguments(args)
             .token.punctuation ,
 
 mixin params(params)
-    span.params
-        each val,index in params
-            identifier(name=val.name)
-            if index < params.length - 1
-                .token.punctuation ,
+    each val,index in params
+        identifier(name=val.name)
+        if index < params.length - 1
+            .token.punctuation ,
 
 mixin ExpressionStatement(node)
     .expressionstatement
