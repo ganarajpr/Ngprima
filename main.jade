@@ -11,10 +11,8 @@ mixin fn(node)
     +params(node.params)
     .token.punctuation )
     .token.punctuation {
-    br
     +Statement(node.body)
     .token.punctuation }
-    br
 
 mixin VariableDeclaration(node)
     .variabledeclaration
@@ -33,7 +31,7 @@ mixin BinaryExpression(node)
 
 mixin literal(node)
     .literal
-        .token.value #{node.raw}
+        .token.constant #{node.raw}
 
 
 mixin Statement(node)
@@ -362,6 +360,7 @@ mixin params(params)
 mixin ExpressionStatement(node)
     .expressionstatement
         +expression(node.expression)
+        .token.punctuation ;
 
 
 mixin program(node)

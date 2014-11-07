@@ -67,6 +67,11 @@ pre[class*="language-"] {
     display : inline-block;
 }
 
+.program .variabledeclaration,
+.program .expressionstatement{
+    display: block;
+}
+
 .token.comment,
 .token.prolog,
 .token.doctype,
