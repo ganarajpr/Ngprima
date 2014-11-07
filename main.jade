@@ -126,16 +126,16 @@ mixin ObjectExpression(node)
     .objectexpression
         .token.punctuation {
         each prop,index in node.properties
-            +property(prop)
-            if index < node.properties.length - 1
-                .token.punctuation ,
+            +property(prop,index < node.properties.length - 1)
         .token.punctuation }
 
-mixin property(node)
+mixin property(node,hasComma)
     .property
         +identifier(node.key.name)
         .token.punctuation :
         +expression(node.value)
+        if hasComma
+            .token.punctuation ,
 
 mixin ArrayExpression(node)
     .arrayexpression
