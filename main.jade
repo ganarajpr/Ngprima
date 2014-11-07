@@ -12,7 +12,7 @@ mixin fn(node)
     .token.punctuation )
     .token.punctuation {
     +Statement(node.body)
-    .token.punctuation }
+    .token.punctuation.end }
 
 mixin VariableDeclaration(node)
     .variabledeclaration
@@ -48,8 +48,6 @@ mixin Statement(node)
     if node.type === 'DoWhileStatement'
         +DoWhileStatement(node)
     if node.type === 'IfStatement'
-        +IfStatement(node)
-    if node.type === 'Statement'
         +IfStatement(node)
     if node.type === 'BreakStatement'
         +BreakStatement(node)
@@ -184,7 +182,7 @@ mixin IfStatement(node)
         .token.punctuation )
         .token.punctuation {
         +Statement(node.consequent)
-        .token.punctuation }
+        .token.punctuation.end }
         if node.alternate
             +Statement(node.alternate)
 
@@ -207,7 +205,7 @@ mixin ForStatement(node)
         .token.punctuation )
         .token.punctuation {
             +body(node.body)
-        .token.punctuation }
+        .token.punctuation.end }
 
 mixin EmptyStatement(node)
     .EmptyStatement
@@ -224,14 +222,14 @@ mixin WhileStatement(node)
         .token.punctuation )
         .token.punctuation {
         +Statement(node.body)
-        .token.punctuation }
+        .token.punctuation.end }
 
 mixin DoWhileStatement(node)
     .DoWhileStatement
         .token.keyword do
         .token.punctuation {
         +Statement(node.body)
-        .token.punctuation }
+        .token.punctuation.end }
         .token.keyword while
         .token.punctuation (
         +expression(node.test)
@@ -261,7 +259,7 @@ mixin TryStatement(node)
     .token.keyword try
     .token.punctuation {
     +BlockStatement(node.block)
-    .token.punctuation }
+    .token.punctuation.end }
     each guard,index in node.handlers
         +CatchClause(guard)
     if node.finalizer
@@ -274,7 +272,7 @@ mixin CatchClause(node)
     .token.punctuation )
     .token.punctuation {
     +BlockStatement(node.body)
-    .token.punctuation }
+    .token.punctuation.end }
 
 mixin BreakStatement(node)
     .BreakStatement
@@ -299,7 +297,7 @@ mixin WithStatement(node)
     .token.punctuation )
     .token.punctuation {
     +Statement(node.body)
-    .token.punctuation }
+    .token.punctuation.end }
 
 
 mixin LabeledStatement(node)
@@ -324,10 +322,11 @@ mixin ThrowStatement(node)
 
 
 mixin SwitchCases(node)
-    .token.keyword case
-    if node.test
-        +expression(node.test)
-    .token.punctuation :
+    .switchcase
+        .token.keyword case
+        if node.test
+            +expression(node.test)
+        .token.punctuation :
     +body(node.consequent)
 
 mixin SwitchStatement(node)
@@ -339,7 +338,7 @@ mixin SwitchStatement(node)
     .token.punctuation {
     each switchcase,index in node.cases
         +SwitchCases(switchcase)
-    .token.punctuation }
+    .token.punctuation.end }
 
 mixin body(node)
     each val,index in node

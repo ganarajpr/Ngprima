@@ -64,12 +64,16 @@ pre[class*="language-"] {
 }
 
 .program div {
-    display : inline-block;
+    display : inline;
 }
 
 .program .variabledeclaration,
 .program .expressionstatement,
-.program .property{
+.program .property,
+.program .switchcase,
+.program .IfStatement,
+.program .ReturnStatement,
+.program .token.punctuation.end{
     display: block;
 }
 
