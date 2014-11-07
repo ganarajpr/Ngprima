@@ -100,10 +100,59 @@ mixin expression(node)
         +NewExpression(node)
     if node.type === 'BinaryExpression'
         +BinaryExpression(node)
+    if node.type === 'SequenceExpression'
+        +SequenceExpression(node)
+    if node.type === 'UnaryExpression'
+        +UnaryExpression(node)
+    if node.type === 'UpdateExpression'
+        +UpdateExpression(node)
+    if node.type === 'LogicalExpression'
+        +LogicalExpression(node)
+    if node.type === 'ConditionalExpression'
+        +ConditionalExpression(node)
     if node.type === 'Identifier'
         +identifier(node.name)
     if node.type === 'Literal'
         +literal(node)
+
+mixin SequenceExpression(node)
+    .SequenceExpression
+        each expr,index in node.expressions
+            +expression(expr)
+            if index < node.expressions.length -1
+            .token.punctuation ,
+
+
+mixin UnaryExpression(node)
+    .UnaryExpression
+        .token.punctuation #{node.operator}
+        +expression(node.argument)
+
+mixin UpdateExpression(node)
+    .UpdateExpression
+        if node.prefix
+            .token.punctuation #{node.operator}
+            +expression(node.operator)
+        else
+            +expression(node.operator)
+            .token.punctuation #{node.operator}
+
+
+mixin LogicalExpression(node)
+    .LogicalExpression
+        +expression(node.left)
+        .token.operator #{node.operator}
+        +expression(node.right)
+
+
+mixin ConditionalExpression(node)
+    .ConditionalExpression
+        +expression(node.test)
+        .token.punctuation ?
+        +expression(node.consequent)
+        .token.punctuation :
+        +expression(node.alternate)
+
 
 mixin CallExpression(node)
     .callexpression
@@ -184,7 +233,10 @@ mixin IfStatement(node)
         +Statement(node.consequent)
         .token.punctuation.end }
         if node.alternate
+            .token.keyword else
+            .token.punctuation {
             +Statement(node.alternate)
+            .token.punctuation }
 
 
 mixin ForStatement(node)
@@ -336,8 +388,9 @@ mixin SwitchStatement(node)
     +expression(node.discriminant)
     .token.punctuation )
     .token.punctuation {
-    each switchcase,index in node.cases
-        +SwitchCases(switchcase)
+    .body
+        each switchcase,index in node.cases
+            +SwitchCases(switchcase)
     .token.punctuation.end }
 
 mixin body(node)
