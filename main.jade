@@ -11,7 +11,7 @@ mixin fn(node)
     .token.punctuation )
     .token.punctuation {
     br
-    +body(node.body.body)
+    +Statement(node.body)
     .token.punctuation }
     br
 
@@ -144,10 +144,10 @@ mixin IfStatement(node)
         +expression(node.test)
         .token.punctuation )
         .token.punctuation {
-        +body(node.consequent.body)
+        +Statement(node.consequent)
         .token.punctuation }
         if node.alternate
-            +body(node.alternate.body)
+            +Statement(node.alternate)
 
 mixin body(node)
     each val,index in node
@@ -164,11 +164,19 @@ mixin BlockStatement(node)
 
 mixin Statement(node)
     if node.type === 'ExpressionStatement'
-    +ExpressionStatement(val)
+        +ExpressionStatement(node)
     if node.type === 'ForStatement'
-        +ForStatement(val)
+        +ForStatement(node)
     if node.type === 'IfStatement'
-        +IfStatement(val)
+        +IfStatement(node)
+    if node.type === 'BreakStatement'
+        +BreakStatement(node)
+    if node.type === 'ContinueStatement'
+        +ContinueStatement(node)
+    if node.type === 'VariableDeclaration'
+        +VariableDeclaration(node)
+    if node.type === 'FunctionDeclaration'
+        +FunctionDeclaration(node)
 
 
 mixin BreakStatement(node)
