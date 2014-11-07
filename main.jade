@@ -6,7 +6,7 @@ mixin FunctionDeclaration(node)
 mixin fn(node)
     .token.function function
     if node.id
-        identifier(name=node.id.name)
+        +identifier(node.id.name)
     .token.punctuation (
     +params(node.params)
     .token.punctuation )
@@ -22,7 +22,7 @@ mixin VariableDeclaration(node)
         each decl,index in node.declarations
             +VariableDeclarator(decl)
             if index <= node.declarations.length - 1
-                .token.punctuation ,
+                .token.punctuation ;
 
 
 mixin BinaryExpression(node)
@@ -80,7 +80,7 @@ mixin Statement(node)
 
 mixin VariableDeclarator(node)
     .variabledeclarator
-        identifier(name=node.id.name)
+        +identifier(node.id.name)
         if node.init
             .token.punctuation =
             +expression(node.init)
@@ -100,15 +100,25 @@ mixin expression(node)
         +FunctionExpression(node)
     if node.type === 'CallExpression'
         +CallExpression(node)
+    if node.type === 'NewExpression'
+        +NewExpression(node)
     if node.type === 'BinaryExpression'
         +BinaryExpression(node)
     if node.type === 'Identifier'
-        identifier(name=node.name)
+        +identifier(node.name)
     if node.type === 'Literal'
         +literal(node)
 
 mixin CallExpression(node)
     .callexpression
+        +expression(node.callee)
+        .token.punctuation (
+        +arguments(node.arguments)
+        .token.punctuation )
+
+mixin NewExpression(node)
+    .newexpression
+        .token.keyword new
         +expression(node.callee)
         .token.punctuation (
         +arguments(node.arguments)
@@ -125,7 +135,7 @@ mixin ObjectExpression(node)
 
 mixin property(node)
     .property
-        identifier(name=node.key.name)
+        +identifier(node.key.name)
         .token.punctuation :
         +expression(node.value)
 
@@ -149,7 +159,7 @@ mixin MemberExpression(node)
     .memberexpression
         +expression(node.object)
         .token.punctuation .
-        identifier(name=node.property.name)
+        +identifier(node.property.name)
 
 mixin FunctionExpression(node)
     .functionexpression(scope-creator='true')
@@ -262,7 +272,7 @@ mixin TryStatement(node)
 mixin CatchClause(node)
     .token.keyword catch
     .token.punctuation (
-    identifier(name=node.param.name)
+    +identifier(node.param.name)
     .token.punctuation )
     .token.punctuation {
     +BlockStatement(node.body)
@@ -272,14 +282,14 @@ mixin BreakStatement(node)
     .BreakStatement
     .token.keyword break
     if node.label
-        identifier(name=node.label.name)
+        +identifier(node.label.name)
     .token.punctuation ;
 
 mixin ContinueStatement(node)
     .ContinueStatement
     .token.keyword continue
     if node.label
-        identifier(name=node.label.name)
+        +identifier(node.label.name)
     .token.punctuation ;
 
 
@@ -296,7 +306,7 @@ mixin WithStatement(node)
 
 mixin LabeledStatement(node)
     .LabeledStatement
-    identifier(name=node.label.name)
+    +identifier(node.label.name)
     .token.punctuation :
     +Statement(node.body)
 
@@ -345,7 +355,7 @@ mixin arguments(args)
 
 mixin params(params)
     each val,index in params
-        identifier(name=val.name)
+        +identifier(val.name)
         if index < params.length - 1
             .token.punctuation ,
 
@@ -359,4 +369,9 @@ mixin program(node)
         +body(node)
 
 
+mixin identifier(name)
+    .identifier #{name}
+
+head
+    link(rel='stylesheet',href='styles.css')
 +program(body)
