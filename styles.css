@@ -77,6 +77,10 @@ pre[class*="language-"] {
     display: block;
 }
 
+.program .callexpression .token.punctuation.end{
+    display: inline;
+}
+
 .token.comment,
 .token.prolog,
 .token.doctype,
