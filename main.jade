@@ -19,8 +19,9 @@ mixin VariableDeclaration(node)
         .token.keyword #{node.kind}
         each decl,index in node.declarations
             +VariableDeclarator(decl)
-            if index <= node.declarations.length - 1
-                .token.punctuation ;
+            if index < node.declarations.length - 1
+                .token.punctuation ,
+        .token.punctuation ;
 
 
 mixin BinaryExpression(node)
