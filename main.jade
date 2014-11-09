@@ -1,18 +1,19 @@
 
 mixin FunctionDeclaration(node)
-    .functiondeclaration(scope-creator='true')
+    .functiondeclaration
         +fn(node)
 
 mixin fn(node)
     .token.function function
     if node.id
-        +identifier(node.id.name)
-    .token.punctuation (
-    +params(node.params)
-    .token.punctuation )
-    .token.punctuation {
-    +Statement(node.body)
-    .token.punctuation.end }
+        +identifier(node.id.name)(origin='')
+    .context(scope-creator='true')
+        .token.punctuation (
+        +params(node.params)
+        .token.punctuation )
+        .token.punctuation {
+        +Statement(node.body)
+        .token.punctuation.end }
 
 mixin VariableDeclaration(node)
     .variabledeclaration
@@ -77,7 +78,7 @@ mixin Statement(node)
 
 mixin VariableDeclarator(node)
     .variabledeclarator
-        +identifier(node.id.name)
+        +identifier(node.id.name)(origin='')
         if node.init
             .token.punctuation =
             +expression(node.init)
@@ -179,7 +180,8 @@ mixin ObjectExpression(node)
 
 mixin property(node,hasComma)
     .property
-        +identifier(node.key.name)
+        .objectkey(object-key='')
+            +identifier(node.key.name)(exclude-addition='')
         .token.punctuation :
         +expression(node.value)
         if hasComma
@@ -205,10 +207,10 @@ mixin MemberExpression(node)
     .memberexpression
         +expression(node.object)
         .token.punctuation .
-        +identifier(node.property.name)
+        +identifier(node.property.name)(exclude-addition='')
 
 mixin FunctionExpression(node)
-    .functionexpression(scope-creator='true')
+    .functionexpression
         +fn(node)
 
 mixin ThisExpression(node)
@@ -319,13 +321,14 @@ mixin TryStatement(node)
         +BlockStatement(node.finalizer)
 
 mixin CatchClause(node)
-    .token.keyword catch
-    .token.punctuation (
-    +identifier(node.param.name)
-    .token.punctuation )
-    .token.punctuation {
-    +BlockStatement(node.body)
-    .token.punctuation.end }
+    .CatchClause(scope-creator='true')
+        .token.keyword catch
+        .token.punctuation (
+        +identifier(node.param.name)(origin='')
+        .token.punctuation )
+        .token.punctuation {
+        +BlockStatement(node.body)
+        .token.punctuation.end }
 
 mixin BreakStatement(node)
     .BreakStatement
@@ -407,7 +410,7 @@ mixin arguments(args)
 
 mixin params(params)
     each val,index in params
-        +identifier(val.name)
+        +identifier(val.name)(origin='')
         if index < params.length - 1
             .token.punctuation ,
 
@@ -423,8 +426,6 @@ mixin program(node)
 
 
 mixin identifier(name)
-    .identifier #{name}
+    .identifier(identifier=name)&attributes(attributes) #{name}
 
-head
-    link(rel='stylesheet',href='styles.css')
 +program(body)
