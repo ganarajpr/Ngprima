@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "ast-types": "^0.6.6",
+    "chrome-remote-interface": "^0.5.0",
     "filestoast": "^0.1.0",
     "fondue": "^0.6.1",
     "jade": "^1.7.0",
