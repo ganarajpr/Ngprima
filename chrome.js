@@ -1,129 +1,83 @@
 var Chrome = require('chrome-remote-interface');
 var esprima = require('esprima');
 var types = require("ast-types");
+var n = types.namedTypes;
+var breakPointToFuncEntry = {};
+var breakPointToFuncExit = {};
 
-function setBreakPoints(url){
+function setBreakPointsOnSource(source,url,chrome){
+    var ast = esprima.parse(source,{loc:true});
     types.visit(ast, {
         visitFunction: function (path) {
+            var node = path.node;
+            if(n.BlockStatement.check(node.body)){
+                var blockBody = node.body.body;
+                chrome.Debugger.setBreakpointByUrl({
+                    lineNumber : blockBody[0].loc.start.line,
+                    columnNumber : blockBody[0].loc.start.column,
+                    url : url
+                },function(resp){
+                    console.log('setbp',blockBody[0].loc.start,resp);
+                });
+                if(!n.ReturnStatement.check(blockBody[blockBody.length-1])){
+                    chrome.Debugger.setBreakpointByUrl({
+                        lineNumber : blockBody[blockBody.length-1].loc.start.line,
+                        columnNumber : blockBody[blockBody.length-1].loc.start.column,
+                        url : url
+                    },function(resp){
+                        console.log('setbp exit',blockBody[blockBody.length-1].loc.start,resp);
+                    });
+                }
+                breakPointToFuncEntry[url+':'+blockBody[0].loc.start.line+':'+blockBody[0].loc.start.column] = node.id ? node.id.name : '';
+                breakPointToFuncExit[url+':'+blockBody[blockBody.length-1].loc.start.line+':'+blockBody[blockBody.length-1].loc.start.column] = node.id ? node.id.name : '';
+            }
+
             this.traverse(path);
-            var body = getStatementOf(path);
-            if (getStatementType(body) === 'ReturnStatement') {
-                path.replace(getIIFE(path.node));
-            }
-            else {
-                body.path.get(body.position).insertBefore(getConsoleLog('start'));
-                body.path.get(body.position + 1).insertAfter(getConsoleLog('end'));
-            }
-
-
+        },
+        visitReturnStatement : function(path){
+            this.traverse(path);
         }
     });
 }
 
-function getSource(sourceUrl){
-    var http = require('http');
-    var https = require('https');
-    var url = require('url');
+function setBreakPointsOnUrl(sourceUrl,chrome){
+    var request = require('request');
     if(sourceUrl){
-        var urlDef = url.parse(sourceUrl);
-
-        if(urlDef.protocol === 'https:'){
-            https.get(sourceUrl, function(res) {
-                console.log("Got response: " + res);
-                res.on('data', function(d) {
-                    console.log("Got response data: ",sourceUrl);
-                });
-
-            });
-        }
-        else if(urlDef.protocol === 'http:'){
-            http.get(sourceUrl, function(res) {
-                console.log("Got response: " + res);
-                res.on('data', function(d) {
-                    console.log("Got response data: ",sourceUrl + d);
-                });
-            });
-        }
+        request.get(sourceUrl, function (error, response, body) {
+            if (!error && response.statusCode == 200 && response.headers['content-type'] === 'application/javascript') {
+                console.log(sourceUrl);
+                setBreakPointsOnSource(body,sourceUrl,chrome);
+            }
+        });
     }
-
-
-
 }
 
 Chrome(function (chrome) {
     with (chrome) {
         Runtime.enable();
-        /*on('Runtime.executionContextCreated',function(){
-            console.log(JSON.stringify(arguments));
-        });*/
-        var previousCallFrameId;
         Debugger.enable();
-        Debugger.setBreakpointByUrl({
-            lineNumber : 15,
-            columnNumber : 0,
-            url : 'http://localhost:8080/js/app.js'
-        },function(resp){
-            console.log('setbp115',resp);
-        });
-        Debugger.setBreakpointByUrl({
-            lineNumber : 40,
-            columnNumber : 0,
-            url : 'http://localhost:8080/js/app.js'
-        },function(resp){
-            console.log('setbp40',resp);
-        });
+
         on('Debugger.scriptParsed',function(resp){
             console.log("script parsed ",resp.url,resp.scriptId);
-            //setBreakPoints(resp.url);
-            getSource(resp.url);
+            setBreakPointsOnUrl(resp.url,chrome);
         });
-        on('Debugger.breakpointResolved', function onDebuggerPaused(response) {
+        Debugger.pause();
 
-            /*chrome.Debugger.getBacktrace(null,function(a){
-             console.log(arguments);
-
-             });*/
-            console.log('breakpoint hit',response.location);
-            //console.log(JSON.stringify(response));
+        setTimeout(function(){
             chrome.Debugger.resume();
-            /*if(response.callFrames[0].callFrameId !== previousCallFrameId){
-                previousCallFrameId = response.callFrames[0].callFrameId;
-                console.log(response.callFrames[0].functionName);
-
-                if(response.callFrames[0].scopeChain[0].object.className !== 'Window'){
-                    chrome.Runtime.getProperties({'objectId':response.callFrames[0].scopeChain[0].object.objectId},function(err,resp){
-                        resp.result.forEach(function(res){
-                            console.log(res.name);
-                        });
-                        chrome.Debugger.stepOver(null,function(){
-                            console.log(arguments);
-                        });
-                    });
+        },3000);
+        on('Debugger.paused', function onDebuggerPaused(response) {
+            if(response.hitBreakpoints){
+                if(breakPointToFuncEntry[response.hitBreakpoints[0]] !== undefined ){
+                    console.log('breakpoint hit entry',response.hitBreakpoints[0]);
                 }
                 else{
-                    //chrome.Debugger.resume();
-                    chrome.Debugger.stepOver(null,function(){
-                        console.log(arguments);
-                    });
+                    console.log('breakpoint hit exit',response.hitBreakpoints[0]);
                 }
+
             }
-            else{
-                chrome.Debugger.stepOver(null,function(){
-                    console.log(arguments);
-                });
-            }*/
+            chrome.Debugger.resume();
 
-
-
-            /*response.callFrames.forEach(function(callFrame){
-                callFrame.scopeChain.forEach(function(scope){
-                    chrome.Runtime.getProperties({'objectId':scope.object.objectId},function(err,resp){
-                        resp.result.forEach(function(res){
-                            console.log(res.name,'=',res.value);
-                        });
-                    });
-                });
-            });*/
 
 
         });
@@ -131,7 +85,6 @@ Chrome(function (chrome) {
         Network.enable();
         Page.enable();
         Page.navigate({'url': 'http://localhost:8080/test.html'});
-
 
 
 

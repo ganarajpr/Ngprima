@@ -20,6 +20,7 @@
     "fondue": "^0.6.1",
     "jade": "^1.7.0",
     "jasmine-node": "latest",
-    "lodash": "latest"
+    "lodash": "latest",
+    "request": "^2.53.0"
   }
 }
