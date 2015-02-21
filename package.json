@@ -18,9 +18,11 @@
     "chrome-remote-interface": "^0.5.0",
     "filestoast": "^0.1.0",
     "fondue": "^0.6.1",
+    "fondue-middleware": "0.0.2",
     "jade": "^1.7.0",
     "jasmine-node": "latest",
     "lodash": "latest",
+    "q": "^1.1.2",
     "request": "^2.53.0"
   }
 }
