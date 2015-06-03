@@ -63,3 +63,26 @@ function doAll(node){
     $('link').remove();
     $('style').remove();
 }
+
+
+function getBounds(node,bounds){
+    if(node.nodeType === 1){
+        var cr = node.getClientRects();
+        if(cr[0]){
+            var rect = cr[0];
+            bounds.push({
+                name : node.tagName,
+                top : rect.top,
+                left : rect.left,
+                width : rect.width,
+                height : rect.height
+            })
+        }
+    }
+
+    if(node.childNodes && node.childNodes.length){
+        for( var i =0;i<node.childNodes.length;i++){
+            getBounds(node.childNodes[i],bounds);
+        }
+    }
+}
